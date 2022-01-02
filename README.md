@@ -1,3 +1,3 @@
 # Project Config #
 
-Scripts that enforce consistent configuration of repositories maintained by Robert Važan.
+Scripts that enforce consistent configuration of projects maintained by Robert Važan.
