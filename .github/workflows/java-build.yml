@@ -21,7 +21,7 @@ jobs:
       - name: Maven
         run: |
           COVERAGE_GOAL=
-          if [ $TEST_COVERAGE == 'true'; then
+          if [ $TEST_COVERAGE == 'true' ]; then
             # JaCoCo phase is needed to create code coverage report that will be later uploaded to Codecov.
             COVERAGE_GOAL=jacoco:report
           fi
