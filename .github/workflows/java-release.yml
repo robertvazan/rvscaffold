@@ -1,0 +1,44 @@
+name: Java release
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        required: true
+        type: number
+      server-username:
+        required: true
+        type: string
+    secrets:
+      server-password:
+        required: true
+        type: string
+      signing-key:
+        required: true
+        type: string
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java-version }}
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          cache: maven
+      - name: Import GPG key
+        # We would prefer actions/setup-java to also setup GPG signing for us, but that feature is not yet available.
+        run: |
+          mkdir -p ~/.gnupg/
+          printf "$MAVEN_SIGNING_KEY" | base64 --decode > ~/.gnupg/maven-signing-key.gpg
+          gpg --import ~/.gnupg/maven-signing-key.gpg
+        env:
+          MAVEN_SIGNING_KEY: ${{ secrets.signing-key }}
+      - name: Maven
+        # Printing maven version (-V) helps diagnose GitHub-specific build behavior.
+        run: mvn -B -V deploy
+        env:
+          MAVEN_USERNAME: ${{ inputs.server-username }}
+          MAVEN_PASSWORD: ${{ secrets.server-password }}
