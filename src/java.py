@@ -146,6 +146,7 @@ def homepage_lead():
     return lead
 
 def print_to(path, generator):
+    print(f'Generating {path}...')
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, 'w') as file:
         with contextlib.redirect_stdout(file):
@@ -485,11 +486,17 @@ def readme():
             Distributed under [{license_name()}](LICENSE).
         ''')
 
+def gitignore():
+    print_lines(gitignore_text())
+
+def license():
+    print_lines(license_text())
+
 def generate(settings):
     globals().update(settings)
-    (project_directory()/'.gitignore').write_text(gitignore_text())
+    print_to(project_directory()/'.gitignore', gitignore);
     if is_opensource():
-        (project_directory()/'LICENSE').write_text(license_text())
+        print_to(project_directory()/'LICENSE', license);
         print_to(project_directory()/'NOTICE', notice)
         print_to(workflows_directory()/'build.yml', build_workflow)
     if maven_central():
@@ -498,3 +505,4 @@ def generate(settings):
     if is_opensource():
         print_to(project_directory()/'CONTRIBUTING.md', contribution_guidelines)
     print_to(project_directory()/'README.md', readme)
+    print(f'Updated {pretty_name()} configuration.')
