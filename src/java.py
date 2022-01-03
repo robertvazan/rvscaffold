@@ -15,7 +15,8 @@ apache_license_text = lambda: (resource_directory()/'license.txt').read_text('ut
 gitignore_text = lambda: (resource_directory()/'java'/'gitignore.txt').read_text('utf-8')
 
 # checkout
-project_directory = lambda: pathlib.Path.cwd().parent
+project_script_path = None
+project_directory = lambda: pathlib.Path(project_script_path).parent.parent
 workflows_directory = lambda: project_directory()/'.github'/'workflows'
 
 # repository
