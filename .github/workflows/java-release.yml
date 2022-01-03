@@ -8,13 +8,10 @@ on:
     secrets:
       server-password:
         required: true
-        type: string
       signing-key:
         required: true
-        type: string
       signing-password:
         required: true
-        type: string
 jobs:
   release:
     runs-on: ubuntu-latest
