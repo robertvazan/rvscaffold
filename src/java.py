@@ -42,7 +42,7 @@ inception_year = lambda: current_year()
 pom_subgroup = lambda: repository_name()
 pom_group = lambda: 'com.machinezoo.' + pom_subgroup()
 pom_artifact = lambda: repository_name()
-pom_version = lambda: '0.0.1'
+pom_version = lambda: (project_directory()/'scripts'/'version.txt').read_text('utf-8').strip()
 
 # website
 has_website = lambda: True
@@ -490,7 +490,7 @@ def gitignore():
     print_lines(gitignore_text())
 
 def license():
-    print_lines(license_text())
+    print(license_text(), end='')
 
 def generate(settings):
     globals().update(settings)
