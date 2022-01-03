@@ -200,9 +200,9 @@ def release_workflow():
             uses: robertvazan/project-config/.github/workflows/java-release.yml@master
             with:
               java-version: {jdk_version()}
-              server-username: ${{{{ secrets.MAVEN_USERNAME }}}}
-              server-password: ${{{{ secrets.MAVEN_PASSWORD }}}}
+              server-password: ${{{{ secrets.MAVEN_SERVER_PASSWORD }}}}
               signing-key: ${{{{ secrets.MAVEN_SIGNING_KEY }}}}
+              signing-password: ${{{{ secrets.MAVEN_SIGNING_PASSWORD }}}}
     ''')
 
 def pom():

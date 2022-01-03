@@ -5,14 +5,14 @@ on:
       java-version:
         required: true
         type: number
-      server-username:
-        required: true
-        type: string
     secrets:
       server-password:
         required: true
         type: string
       signing-key:
+        required: true
+        type: string
+      signing-password:
         required: true
         type: string
 jobs:
@@ -25,20 +25,15 @@ jobs:
           distribution: temurin
           java-version: ${{ inputs.java-version }}
           server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+          server-username: MAVEN_SERVER_USERNAME
+          server-password: MAVEN_SERVER_PASSWORD
+          gpg-private-key: ${{ secrets.signing-key }}
+          gpg-passphrase: MAVEN_SIGNING_PASSWORD
           cache: maven
-      - name: Import GPG key
-        # We would prefer actions/setup-java to also setup GPG signing for us, but that feature is not yet available.
-        run: |
-          mkdir -p ~/.gnupg/
-          printf "$MAVEN_SIGNING_KEY" | base64 --decode > ~/.gnupg/maven-signing-key.gpg
-          gpg --import ~/.gnupg/maven-signing-key.gpg
-        env:
-          MAVEN_SIGNING_KEY: ${{ secrets.signing-key }}
       - name: Maven
         # Printing maven version (-V) helps diagnose GitHub-specific build behavior.
         run: mvn -B -V deploy
         env:
-          MAVEN_USERNAME: ${{ inputs.server-username }}
-          MAVEN_PASSWORD: ${{ secrets.server-password }}
+          MAVEN_SERVER_USERNAME: robertvazan
+          MAVEN_SERVER_PASSWORD: ${{ secrets.server-password }}
+          MAVEN_SIGNING_PASSWORD: ${{ secrets.signing-password }}
