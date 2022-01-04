@@ -5,6 +5,7 @@ import datetime
 import textwrap
 import re
 import urllib.request
+import urllib.parse
 
 # resources and constants
 config_script_path = pathlib.Path(__file__)
@@ -116,9 +117,16 @@ def use(dependency, scope=None, *, exclusions=[]):
     print_pom(2, '</dependency>')
 
 def use_slf4j(): use('org.slf4j:slf4j-api:1.7.32')
+def use_fastutil(): use('it.unimi.dsi:fastutil:8.5.6')
+def use_commons_io(): use('commons-io:commons-io:2.11.0')
+def use_gson(): use('com.google.code.gson:gson:2.8.9')
+def use_jackson_cbor():
+    use('com.fasterxml.jackson.core:jackson-databind:2.13.1')
+    use('com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.13.1')
 def use_junit(): use('org.junit.jupiter:junit-jupiter:5.8.2', 'test')
 def use_hamcrest(): use('org.hamcrest:hamcrest:2.2', 'test')
 def use_mockito(): use('org.mockito:mockito-core:4.2.0', 'test')
+def use_slf4j_test(): use('com.github.valfirst:slf4j-test:2.3.0', 'test')
 
 def standard_badges():
     if maven_central():
@@ -138,10 +146,12 @@ def standard_documentation_links():
 
 homepage_html = None
 def homepage_lead():
+    url = homepage()
     global homepage_html
     if not homepage_html:
-        homepage_html = urllib.request.urlopen(homepage()).read().decode('utf-8')
+        homepage_html = urllib.request.urlopen(url).read().decode('utf-8')
     lead = re.search(r'<p>(.*?)</p>', homepage_html, re.DOTALL).group(1)
+    lead = re.sub(r'''<a\s+href=["']([^'"]*)["']>(.*?)</a>''', lambda m: f'[{m.group(2)}]({urllib.parse.urljoin(url, m.group(1))})', lead, 0, re.DOTALL)
     lead = re.sub(r'<.*?>', '', lead, 0, re.DOTALL)
     return lead
 
@@ -269,12 +279,23 @@ def pom():
         <dependencies>
     ''')
     dependencies()
-    # Needed for Java 11+.
-    # Contains fix for https://issues.apache.org/jira/browse/MCOMPILER-289
     print_pom(1, f'''\
         </dependencies>
 
         <build>
+    ''')
+    if (project_directory()/'src'/'main'/'filtered').is_dir():
+        print_pom(2, '''\
+            <resources>
+                <resource>
+                    <directory>src/main/filtered</directory>
+                    <filtering>true</filtering>
+                </resource>
+            </resources>
+        ''')
+    # Needed for Java 11+.
+    # Contains fix for https://issues.apache.org/jira/browse/MCOMPILER-289
+    print_pom(2, f'''\
             <plugins>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
