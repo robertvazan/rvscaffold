@@ -84,10 +84,11 @@ maven_central = lambda: is_library() and is_opensource()
 test_coverage = lambda: maven_central()
 has_javadoc = lambda: maven_central()
 jmh_benchmarks = lambda: False
+stagean_annotations = lambda: False
 
 # dependencies
 dependencies = lambda: None
-javadoc_links = lambda: []
+javadoc_links = lambda: standard_javadoc_links()
 
 # readme
 badges = lambda: standard_badges()
@@ -123,6 +124,7 @@ def use(dependency, scope=None, *, classifier=None, exclusions=[]):
         print_pom(3, '</exclusions>')
     print_pom(2, '</dependency>')
 
+def use_stagean(): use('com.machinezoo.stagean:stagean:1.2.0')
 def use_pmdata(): use('com.machinezoo.pmdata:pmdata:0.12.3')
 
 def use_slf4j(): use('org.slf4j:slf4j-api:1.7.32')
@@ -145,6 +147,10 @@ def use_hamcrest(): use('org.hamcrest:hamcrest:2.2', 'test')
 def use_mockito(): use('org.mockito:mockito-core:4.2.0', 'test')
 def use_slf4j_test(): use('com.github.valfirst:slf4j-test:2.3.0', 'test')
 
+def standard_javadoc_links():
+    if stagean_annotations():
+        yield 'https://stagean.machinezoo.com/javadoc/'
+
 def standard_badges():
     if maven_central():
         print(f'[![Maven Central](https://img.shields.io/maven-central/v/{pom_group()}/{pom_artifact()})](https://search.maven.org/artifact/{pom_group()}/{pom_artifact()})')
@@ -153,8 +159,9 @@ def standard_badges():
     if test_coverage():
         print(f'[![Test coverage](https://codecov.io/gh/robertvazan/{repository_name()}/branch/master/graph/badge.svg)](https://codecov.io/gh/robertvazan/{repository_name()})')
 
-stable_status = lambda: 'Stable and maintained.'
-experimental_status = lambda: 'Experimental. [Stagean](https://stagean.machinezoo.com/) is used to track progress on class and method level.'
+stagean_notice = lambda: ' [Stagean](https://stagean.machinezoo.com/) is used to track progress on class and method level.' if stagean_annotations() else ''
+stable_status = lambda: 'Stable and maintained.' + stagean_notice()
+experimental_status = lambda: 'Experimental.' + stagean_notice()
 obsolete_status = lambda: 'Obsolete. No longer maintained.'
 unpublished_status = lambda: 'Experimental. Unpublished.'
 
@@ -303,6 +310,8 @@ def pom():
 
         <dependencies>
     ''')
+    if stagean_annotations():
+        use_stagean()
     dependencies()
     if jmh_benchmarks():
         use_jmh()
