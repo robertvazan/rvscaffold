@@ -1,3 +1,4 @@
+import io
 import pathlib
 import pkgutil
 import contextlib
@@ -46,7 +47,7 @@ pom_artifact = lambda: repository_name()
 pom_version = lambda: (project_directory()/'scripts'/'version.txt').read_text('utf-8').strip()
 
 # website
-has_website = lambda: True
+has_website = lambda: is_opensource()
 subdomain = lambda: pom_subgroup()
 website = lambda: f'https://{subdomain()}.machinezoo.com/'
 homepage = lambda: website()
@@ -82,6 +83,7 @@ jdk_parameter_names = lambda: False
 maven_central = lambda: is_library() and is_opensource()
 test_coverage = lambda: maven_central()
 has_javadoc = lambda: maven_central()
+jmh_benchmarks = lambda: False
 
 # dependencies
 dependencies = lambda: None
@@ -89,14 +91,14 @@ javadoc_links = lambda: []
 
 # readme
 badges = lambda: standard_badges()
-project_status = lambda: stable_status() if is_opensource() else 'Experimental.'
+project_status = lambda: stable_status() if is_opensource() else unpublished_status()
 documentation_links = lambda: standard_documentation_links()
-md_description = lambda: homepage_lead() + f'\n\nMore on [homepage]({homepage()}).' if has_website() else None
+md_description = lambda: homepage_lead() + f'\n\nMore on [homepage]({homepage()}).' if has_website() else pom_description()
 
 def use_xml(xml):
     print_pom(2, xml)
 
-def use(dependency, scope=None, *, exclusions=[]):
+def use(dependency, scope=None, *, classifier=None, exclusions=[]):
     group, artifact, version = dependency.split(':')
     print_pom(2, f'''\
         <dependency>
@@ -106,23 +108,38 @@ def use(dependency, scope=None, *, exclusions=[]):
     ''')
     if scope:
         print_pom(3, f'<scope>{scope}</scope>')
-    for exclusion in exclusions:
-        ex_group, ex_artifact = exclusion.split(':')
-        print_pom(3, f'''\
-            <exclusion>
-                <groupId>{ex_group}</groupId>
-                <artifactId>{ex_artifact}</artifactId>
-            </exclusion>
-        ''')
+    if classifier:
+        print_pom(3, f'<classifier>{classifier}</classifier>')
+    if exclusions:
+        print_pom(3, '<exclusions>')
+        for exclusion in exclusions:
+            ex_group, ex_artifact = exclusion.split(':')
+            print_pom(4, f'''\
+                <exclusion>
+                    <groupId>{ex_group}</groupId>
+                    <artifactId>{ex_artifact}</artifactId>
+                </exclusion>
+            ''')
+        print_pom(3, '</exclusions>')
     print_pom(2, '</dependency>')
+
+def use_pmdata(): use('com.machinezoo.pmdata:pmdata:0.12.3')
 
 def use_slf4j(): use('org.slf4j:slf4j-api:1.7.32')
 def use_fastutil(): use('it.unimi.dsi:fastutil:8.5.6')
+def use_commons_math(): use('org.apache.commons:commons-math3:3.6.1')
 def use_commons_io(): use('commons-io:commons-io:2.11.0')
+def use_guava(): use('com.google.guava:guava:31.0.1-jre')
 def use_gson(): use('com.google.code.gson:gson:2.8.9')
+jackson_version = lambda: '2.13.1'
 def use_jackson_cbor():
-    use('com.fasterxml.jackson.core:jackson-databind:2.13.1')
-    use('com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.13.1')
+    use(f'com.fasterxml.jackson.core:jackson-databind:{jackson_version()}')
+    use(f'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:{jackson_version()}')
+jmh_version = lambda: '1.34'
+def use_jmh():
+    use(f'org.openjdk.jmh:jmh-core:{jmh_version()}')
+    use(f'org.openjdk.jmh:jmh-generator-annprocess:{jmh_version()}')
+
 def use_junit(): use('org.junit.jupiter:junit-jupiter:5.8.2', 'test')
 def use_hamcrest(): use('org.hamcrest:hamcrest:2.2', 'test')
 def use_mockito(): use('org.mockito:mockito-core:4.2.0', 'test')
@@ -131,13 +148,15 @@ def use_slf4j_test(): use('com.github.valfirst:slf4j-test:2.3.0', 'test')
 def standard_badges():
     if maven_central():
         print(f'[![Maven Central](https://img.shields.io/maven-central/v/{pom_group()}/{pom_artifact()})](https://search.maven.org/artifact/{pom_group()}/{pom_artifact()})')
-    print(f'[![Build status]({github_repository_url()}/workflows/build/badge.svg)]({github_repository_url()}/actions/workflows/build.yml)')
+    if is_opensource():
+        print(f'[![Build status]({github_repository_url()}/workflows/build/badge.svg)]({github_repository_url()}/actions/workflows/build.yml)')
     if test_coverage():
         print(f'[![Test coverage](https://codecov.io/gh/robertvazan/{repository_name()}/branch/master/graph/badge.svg)](https://codecov.io/gh/robertvazan/{repository_name()})')
 
 stable_status = lambda: 'Stable and maintained.'
 experimental_status = lambda: 'Experimental. [Stagean](https://stagean.machinezoo.com/) is used to track progress on class and method level.'
 obsolete_status = lambda: 'Obsolete. No longer maintained.'
+unpublished_status = lambda: 'Experimental. Unpublished.'
 
 def standard_documentation_links():
     yield 'Homepage', homepage()
@@ -171,6 +190,12 @@ def print_lines(text, *, indent='', tabify=False):
             text = re.sub('^(\t*) {4}', r'\1\t', text, flags=re.MULTILINE)
     text = textwrap.indent(text, indent)
     print(text, end='')
+
+def capture_output(function):
+    f = io.StringIO()
+    with contextlib.redirect_stdout(f):
+        function()
+    return f.getvalue()
 
 def print_pom(indent, text):
     print_lines(text, indent=indent * '\t', tabify=True)
@@ -279,6 +304,8 @@ def pom():
         <dependencies>
     ''')
     dependencies()
+    if jmh_benchmarks():
+        use_jmh()
     print_pom(1, f'''\
         </dependencies>
 
@@ -296,12 +323,12 @@ def pom():
     # Needed for Java 11+.
     # Contains fix for https://issues.apache.org/jira/browse/MCOMPILER-289
     print_pom(2, f'''\
-            <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
     ''')
-    if jdk_preview() or jdk_parameter_names():
+    if jdk_preview() or jdk_parameter_names() or jmh_benchmarks():
         print_pom(4, '<configuration>')
         if jdk_preview() or jdk_parameter_names():
             print_pom(5, '<compilerArgs>')
@@ -310,6 +337,18 @@ def pom():
             if jdk_parameter_names():
                 print_pom(6, '<compilerArg>-parameters</compilerArg>')
             print_pom(5, '</compilerArgs>')
+        if jmh_benchmarks():
+            # Annotation processors are not picked from classpath, because there is nothing on the classpath in Java 9+.
+            # We have to list them here. Otherwise we get the dreaded "Unable to get public no-arg constructor" error.
+            print_pom(5, f'''\
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.openjdk.jmh</groupId>
+                        <artifactId>jmh-generator-annprocess</artifactId>
+                        <version>{jmh_version()}</version>
+                    </path>
+                </annotationProcessorPaths>
+            ''')
         print_pom(4, '</configuration>')
     # Needed for Java 17+.
     print_pom(3, f'''\
@@ -384,7 +423,7 @@ def pom():
     if maven_central():
         # Maven Central releases require source, javadoc, staging, and gpg plugins.
         # Nexus does two-phase staging deployment, which is not supported by maven-deploy-plugin.
-        print_pom(3, f'''\
+        print_pom(3, '''\
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -430,7 +469,44 @@ def pom():
                 </executions>
             </plugin>
         ''')
-    print_pom(0, f'''\
+    if jmh_benchmarks():
+        # Required by JMH architecture. Benchmarks must be compiled into an independent executable JAR file.
+        # Filter prevents failure when shading signed dependencies: https://stackoverflow.com/a/6743609
+        print_pom(3, '''\
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>target/${project.artifactId}-jmh.jar</outputFile>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.openjdk.jmh.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        ''')
+    print_pom(0, '''\
                 </plugins>
             </build>
         </project>
@@ -459,7 +535,8 @@ def contribution_guidelines():
 
         ## Pull requests
 
-        Pull requests are generally welcome, but it's better to open an issue first to discuss your idea.
+        Pull requests are generally welcome.
+        If you would like to make large or controversial changes, open an issue first to discuss your idea.
 
         Don't worry about formatting and naming too much. Code will be reformatted after merge.
         Just don't run your formatter on whole source files, because it makes diffs hard to understand.
@@ -472,8 +549,9 @@ def contribution_guidelines():
 def readme():
     print('<!--- Generated by scripts/configure.py --->')
     print(f'# {pretty_name()}')
-    print()
-    badges()
+    if capture_output(badges):
+        print()
+        badges()
     if md_description():
         print()
         print_lines(md_description())
@@ -495,7 +573,7 @@ def readme():
         print()
         for title, url in documentation_links():
             print(f'* [{title}]({url})')
-    else:
+    elif is_opensource():
         print()
         print_lines(f'''\
             ## Documentation
