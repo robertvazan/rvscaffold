@@ -609,6 +609,11 @@ def gitignore():
 def license():
     print(license_text(), end='')
 
+def remove_obsolete(path):
+    if path.exists():
+        print(f'Removing obsolete {path}...')
+        path.unlink()
+
 def generate(settings):
     globals().update(settings)
     print_to(project_directory()/'.gitignore', gitignore);
@@ -622,4 +627,6 @@ def generate(settings):
     if is_opensource():
         print_to(project_directory()/'CONTRIBUTING.md', contribution_guidelines)
     print_to(project_directory()/'README.md', readme)
+    remove_obsolete(project_directory()/'.travis.yml')
+    remove_obsolete(workflows_directory()/'maven-release.yml')
     print(f'Updated {pretty_name()} configuration.')
