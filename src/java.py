@@ -125,10 +125,12 @@ def use(dependency, scope=None, *, classifier=None, exclusions=[]):
     print_pom(2, '</dependency>')
 
 def use_stagean(): use('com.machinezoo.stagean:stagean:1.2.0')
+def use_hookless(): use('com.machinezoo.hookless:hookless:0.14.4')
 def use_pmdata(): use('com.machinezoo.pmdata:pmdata:0.12.3')
 
 def use_slf4j(): use('org.slf4j:slf4j-api:1.7.32')
 def use_fastutil(): use('it.unimi.dsi:fastutil:8.5.6')
+def use_commons_collections(): use('org.apache.commons:commons-collections4:4.4')
 def use_commons_math(): use('org.apache.commons:commons-math3:3.6.1')
 def use_commons_io(): use('commons-io:commons-io:2.11.0')
 def use_guava(): use('com.google.guava:guava:31.0.1-jre')
