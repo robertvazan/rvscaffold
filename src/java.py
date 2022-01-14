@@ -83,6 +83,7 @@ jdk_parameter_names = lambda: False
 maven_central = lambda: is_library() and is_opensource()
 test_coverage = lambda: maven_central()
 has_javadoc = lambda: maven_central()
+complete_javadoc = lambda: has_javadoc()
 jmh_benchmarks = lambda: False
 stagean_annotations = lambda: False
 
@@ -413,9 +414,13 @@ def pom():
                 <version>3.2.0</version>
                 <configuration>
                     <notimestamp>true</notimestamp>
-                    <bottom>
-                        <![CDATA[<!-- No copyright message. -->]]>
-                    </bottom>
+        ''')
+        if not complete_javadoc() and jdk_version() >= 17:
+            print_pom(5, '<doclint>all,-missing</doclint>')
+        print_pom(5, '''\
+            <bottom>
+                <![CDATA[<!-- No copyright message. -->]]>
+            </bottom>
         ''')
         if list(javadoc_links()):
             # Explicit link list, because detectLinks would cause every CI build to fail.
