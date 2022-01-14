@@ -274,6 +274,8 @@ def pom():
         print_pom(1, f'<description>{pom_description()}</description>')
     if has_website():
         print_pom(1, f'<url>{homepage()}</url>')
+    else:
+        print_pom(1, f'<url>{repository_url()}</url>')
     print_pom(1, f'<inceptionYear>{inception_year()}</inceptionYear>')
     if is_opensource():
         print()
