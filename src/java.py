@@ -468,6 +468,19 @@ def pom():
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
+        ''')
+        if jdk_version() >= 17:
+            # Bugs OSSRH-66257 and NEXUS-26993.
+            print_pom(4, '''\
+                <dependencies>
+                    <dependency>
+                        <groupId>com.thoughtworks.xstream</groupId>
+                        <artifactId>xstream</artifactId>
+                        <version>1.4.15</version>
+                    </dependency>
+                </dependencies>
+            ''')
+        print_pom(3, '''\
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
