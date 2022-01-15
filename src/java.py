@@ -131,6 +131,7 @@ def use_pushmode(): use('com.machinezoo.pushmode:pushmode:0.8.2')
 def use_pmdata(): use('com.machinezoo.pmdata:pmdata:0.12.3')
 
 def use_slf4j(): use('org.slf4j:slf4j-api:1.7.32')
+def use_streamex(): use('one.util:streamex:0.8.1')
 def use_fastutil(): use('it.unimi.dsi:fastutil:8.5.6')
 def use_commons_lang(): use('org.apache.commons:commons-lang3:3.12.0')
 def use_commons_collections(): use('org.apache.commons:commons-collections4:4.4')
