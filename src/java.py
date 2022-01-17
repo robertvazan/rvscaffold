@@ -68,7 +68,7 @@ module_info_path = lambda: project_directory()/'src'/'main'/'java'/'module-info.
 is_module = lambda: module_info_path().exists()
 module_info_text = lambda: module_info_path().read_text('utf-8')
 module_info_matches = lambda pattern: [x.group(1) for x in re.finditer(pattern, module_info_text(), re.MULTILINE)]
-module_name = lambda: module_info_matches(r'\bmodule\s+([a-zA-Z0-9_.]+)')[0]
+module_name = lambda: module_info_matches(r'^(?:open\s+)?module\s+([a-zA-Z0-9_.]+)')[0]
 main_package = lambda: module_name() if is_module() else 'com.machinezoo.' + pom_artifact().replace('-', '.')
 main_class_name = lambda: None
 main_class = lambda: main_package() + '.' + main_class_name() if main_class_name() else None
@@ -316,6 +316,10 @@ def pom():
         <properties>
             <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
             <maven.compiler.release>{jdk_version()}</maven.compiler.release>
+    ''')
+    if main_class():
+        print_pom(2, f'<exec.mainClass>{module_name()}/{main_class()}</exec.mainClass>')
+    print_pom(1, f'''\
         </properties>
 
         <dependencies>
