@@ -57,7 +57,7 @@ def javadoc_home():
         return javadoc_site()
     if is_multi_package():
         return javadoc_site() + module_name() + '/module-summary.html'
-    return javadoc_site() + module_name() + '/' + main_package().replace('.', '/') + '/package-summary.html'
+    return javadoc_site() + module_name() + '/' + main_package_path() + '/package-summary.html'
 
 # project info
 pom_name = lambda: pretty_name()
@@ -70,6 +70,7 @@ module_info_text = lambda: module_info_path().read_text('utf-8')
 module_info_matches = lambda pattern: [x.group(1) for x in re.finditer(pattern, module_info_text(), re.MULTILINE)]
 module_name = lambda: module_info_matches(r'^(?:open\s+)?module\s+([a-zA-Z0-9_.]+)')[0]
 main_package = lambda: module_name() if is_module() else 'com.machinezoo.' + pom_artifact().replace('-', '.')
+main_package_path = lambda: main_package().replace('.', '/')
 main_class_name = lambda: None
 main_class = lambda: main_package() + '.' + main_class_name() if main_class_name() else None
 is_library = lambda: main_class() is None
@@ -128,6 +129,7 @@ def use(dependency, scope=None, *, classifier=None, exclusions=[]):
 def use_stagean(): use('com.machinezoo.stagean:stagean:1.2.0')
 def use_hookless(): use('com.machinezoo.hookless:hookless:0.14.4')
 def use_pushmode(): use('com.machinezoo.pushmode:pushmode:0.8.2')
+def use_pmsite(): use('com.machinezoo.pmsite:pmsite:0.18.2')
 def use_pmdata(): use('com.machinezoo.pmdata:pmdata:0.12.3')
 
 def use_slf4j(): use('org.slf4j:slf4j-api:1.7.32')
@@ -140,8 +142,9 @@ def use_commons_io(): use('commons-io:commons-io:2.11.0')
 def use_guava(): use('com.google.guava:guava:31.0.1-jre')
 def use_gson(): use('com.google.code.gson:gson:2.8.9')
 jackson_version = lambda: '2.13.1'
+def use_jackson(): use(f'com.fasterxml.jackson.core:jackson-databind:{jackson_version()}')
 def use_jackson_cbor():
-    use(f'com.fasterxml.jackson.core:jackson-databind:{jackson_version()}')
+    use_jackson()
     use(f'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:{jackson_version()}')
 jmh_version = lambda: '1.34'
 def use_jmh():
@@ -597,11 +600,9 @@ def readme():
         print()
         print_lines(md_description())
     print()
-    print_lines(f'''\
-        ## Status
-
-        {project_status()}
-    ''')
+    print('## Status')
+    print()
+    print_lines(project_status())
     if has_website():
         print()
         print_lines(f'''\
@@ -615,6 +616,12 @@ def readme():
         print()
         for title, url in documentation_links():
             print(f'* [{title}]({url})')
+        if not complete_javadoc():
+            print()
+            if has_javadoc():
+                print(f'Some APIs are undocumented. You might have to peek in the [source code](src/main/java/{main_package_path()}).')
+            else:
+                print(f'There is no javadoc yet. See [source code](src/main/java/{main_package_path()}) for available APIs.')
     elif is_opensource():
         print()
         print_lines(f'''\
