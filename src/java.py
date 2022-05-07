@@ -190,6 +190,7 @@ def homepage_lead():
     global homepage_html
     if not homepage_html:
         homepage_html = urllib.request.urlopen(url).read().decode('utf-8')
+        homepage_html = re.sub(r'<aside.*?</aside>', '', homepage_html, flags=re.DOTALL)
     lead = re.search(r'<p>(.*?)</p>', homepage_html, re.DOTALL).group(1)
     lead = re.sub(r'<code>(.*?)</code>', r'`\1`', lead)
     lead = re.sub(r'''<a\s+href=["']([^'"]*)["']>(.*?)</a>''', lambda m: f'[{m.group(2)}]({urllib.parse.urljoin(url, m.group(1))})', lead, 0, re.DOTALL)
