@@ -1,56 +1,18 @@
-import io
-import pathlib
-import pkgutil
-import contextlib
-import datetime
-import textwrap
-import re
-import urllib.request
-import urllib.parse
+exec((config_directory()/'src'/'common.py').read_text(), globals)
 
 # resources and constants
-config_script_path = pathlib.Path(__file__)
-config_directory = lambda: config_script_path.parent.parent
-resource_directory = lambda: config_directory()/'res'
-current_year = lambda: datetime.date.today().year
-apache_license_text = lambda: (resource_directory()/'license.txt').read_text('utf-8')
-gitignore_text = lambda: (resource_directory()/'java'/'gitignore.txt').read_text('utf-8')
-
-# checkout
-project_script_path = None
-project_directory = lambda: pathlib.Path(project_script_path).parent.parent
-workflows_directory = lambda: project_directory()/'.github'/'workflows'
+lang_directory = lambda: resource_directory()/'java'
 
 # repository
-repository_name = lambda: project_directory().name
-github_repository_url = lambda: f'https://github.com/robertvazan/{repository_name()}' if is_opensource() else None
-bitbucket_repository_url = lambda: f'https://bitbucket.org/robertvazan/{repository_name()}'
-repository_url = lambda: github_repository_url() if is_opensource() else bitbucket_repository_url()
-repository_file_url = lambda path: f'{repository_url()}/blob/master/{path}'
 scm_connection = lambda: f'scm:git:{repository_url()}.git'
-
-# general info
-pretty_name = lambda: repository_name()
-is_opensource = lambda: True
-
-# license
-license_id = lambda: 'Apache-2.0' if is_opensource() else None
-license_name = lambda: 'Apache License 2.0' if is_opensource() else None
-license_url = lambda: repository_file_url('LICENSE') if is_opensource() else None
-license_text = lambda: apache_license_text() if is_opensource() else None
-inception_year = lambda: current_year()
 
 # maven coordinates
 pom_subgroup = lambda: repository_name()
 pom_group = lambda: 'com.machinezoo.' + pom_subgroup()
 pom_artifact = lambda: repository_name()
-pom_version = lambda: (project_directory()/'scripts'/'version.txt').read_text('utf-8').strip()
 
 # website
-has_website = lambda: is_opensource()
 subdomain = lambda: pom_subgroup()
-website = lambda: f'https://{subdomain()}.machinezoo.com/'
-homepage = lambda: website()
 javadoc_site = lambda: website() + 'javadoc/'
 def javadoc_home():
     if not is_module():
@@ -93,10 +55,10 @@ dependencies = lambda: None
 javadoc_links = lambda: standard_javadoc_links()
 
 # readme
-badges = lambda: standard_badges()
-project_status = lambda: stable_status() if is_opensource() else unpublished_status()
-documentation_links = lambda: standard_documentation_links()
-md_description = lambda: homepage_lead() + f'\n\nMore on [homepage]({homepage()}).' if has_website() else pom_description()
+md_description_fallback = lambda: pom_description()
+stagean_notice = lambda: ' [Stagean](https://stagean.machinezoo.com/) is used to track progress on class and method level.' if stagean_annotations() else ''
+stable_status = lambda: 'Stable and maintained.' + stagean_notice()
+experimental_status = lambda: 'Experimental.' + stagean_notice()
 
 def use_xml(xml):
     print_pom(2, xml)
@@ -172,65 +134,20 @@ def standard_badges():
     if test_coverage():
         print(f'[![Test coverage](https://codecov.io/gh/robertvazan/{repository_name()}/branch/master/graph/badge.svg)](https://codecov.io/gh/robertvazan/{repository_name()})')
 
-stagean_notice = lambda: ' [Stagean](https://stagean.machinezoo.com/) is used to track progress on class and method level.' if stagean_annotations() else ''
-stable_status = lambda: 'Stable and maintained.' + stagean_notice()
-experimental_status = lambda: 'Experimental.' + stagean_notice()
-obsolete_status = lambda: 'Obsolete. No longer maintained.'
-unpublished_status = lambda: 'Experimental. Unpublished.'
-
 def standard_documentation_links():
-    if has_website():
-        yield 'Homepage', homepage()
+    yield from common_documentation_links()
     if has_javadoc():
         yield 'Javadoc', javadoc_home()
 
-homepage_html = None
-def homepage_lead():
-    url = homepage()
-    global homepage_html
-    if not homepage_html:
-        homepage_html = urllib.request.urlopen(url).read().decode('utf-8')
-        homepage_html = re.sub(r'<aside.*?</aside>', '', homepage_html, flags=re.DOTALL)
-    lead = re.search(r'<p>(.*?)</p>', homepage_html, re.DOTALL).group(1)
-    lead = re.sub(r'<code>(.*?)</code>', r'`\1`', lead)
-    lead = re.sub(r'''<a\s+href=["']([^'"]*)["']>(.*?)</a>''', lambda m: f'[{m.group(2)}]({urllib.parse.urljoin(url, m.group(1))})', lead, 0, re.DOTALL)
-    lead = re.sub(r'<.*?>', '', lead, 0, re.DOTALL)
-    return lead
-
-def print_to(path, generator):
-    print(f'Generating {path}...')
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, 'w') as file:
-        with contextlib.redirect_stdout(file):
-            generator()
-
-def print_lines(text, *, indent='', tabify=False):
-    text = textwrap.dedent(text)
-    if text[-1:] != '\n':
-        text += '\n'
-    if tabify:
-        for i in range(0, 5):
-            text = re.sub('^(\t*) {4}', r'\1\t', text, flags=re.MULTILINE)
-    text = textwrap.indent(text, indent)
-    print(text, end='')
-
-def capture_output(function):
-    f = io.StringIO()
-    with contextlib.redirect_stdout(f):
-        function()
-    return f.getvalue()
+def documentation_comment():
+    if is_library() and not complete_javadoc():
+        if has_javadoc():
+            print(f'Some APIs are undocumented. You might have to peek in the [source code](src/main/java/{main_package_path()}).')
+        else:
+            print(f'There is no javadoc yet. See [source code](src/main/java/{main_package_path()}) for available APIs.')
 
 def print_pom(indent, text):
     print_lines(text, indent=indent * '\t', tabify=True)
-
-def notice():
-    print(f"Robert Važan's {pretty_name()}")
-    if has_website():
-        print(homepage())
-    print_lines(f'''\
-        Copyright {inception_year()}-{current_year()} Robert Važan and contributors
-        Distributed under {license_name()}.
-    ''')
 
 def build_workflow():
     print_lines(f'''\
@@ -275,17 +192,16 @@ def pom():
 
             <groupId>{pom_group()}</groupId>
             <artifactId>{pom_artifact()}</artifactId>
-            <version>{pom_version()}</version>
+            <version>{project_version()}</version>
 
             <name>{pom_name()}</name>
     ''')
     if pom_description():
         print_pom(1, f'<description>{pom_description()}</description>')
-    if has_website():
-        print_pom(1, f'<url>{homepage()}</url>')
-    else:
-        print_pom(1, f'<url>{repository_url()}</url>')
-    print_pom(1, f'<inceptionYear>{inception_year()}</inceptionYear>')
+    print_pom(1, f'''
+        <url>{homepage() if has_website() else repository_url()}</url>
+        <inceptionYear>{inception_year()}</inceptionYear>
+    ''')
     if is_opensource():
         print()
         print_pom(1, f'''\
@@ -561,110 +477,10 @@ def pom():
         </project>
     ''')
 
-def contribution_guidelines():
-    print_lines(f'''\
-        <!--- Generated by scripts/configure.py --->
-        # How to contribute to {pretty_name()}
-
-        Thank you for taking interest in {pretty_name()}. There is nothing surprising about contributing to this project.
-        You can stop reading now if you have prior experience contributing to other projects.
-        If you are unsure, read the instructions below.
-
-        ## Authoritative repository
-
-        Sources are mirrored on several sites. You can submit issues and pull requests on any mirror.
-
-        * [{repository_name()} @ GitHub]({github_repository_url()})
-        * [{repository_name()} @ Bitbucket]({bitbucket_repository_url()})
-
-        ## Issues
-
-        Both bug reports and feature requests are welcome. There is no free support,
-        but it's perfectly reasonable to open issues asking for more documentation or better usability.
-
-        ## Pull requests
-
-        Pull requests are generally welcome.
-        If you would like to make large or controversial changes, open an issue first to discuss your idea.
-
-        Don't worry about formatting and naming too much. Code will be reformatted after merge.
-        Just don't run your formatter on whole source files, because it makes diffs hard to understand.
-
-        ## License
-
-        Your submissions will be distributed under [{license_name()}](LICENSE).
-    ''')
-
-def readme():
-    print('<!--- Generated by scripts/configure.py --->')
+def generate():
+    print_to(project_directory()/'.gitignore', gitignore)
     if is_opensource():
-        print('[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)')
-        print()
-    print(f'# {pretty_name()}')
-    if capture_output(badges):
-        print()
-        badges()
-    if md_description():
-        print()
-        print_lines(md_description())
-    print()
-    print('## Status')
-    print()
-    print_lines(project_status())
-    if has_website():
-        print()
-        print_lines(f'''\
-            ## Getting started
-
-            See [homepage]({homepage()}).
-        ''')
-    if list(documentation_links()):
-        print()
-        print('## Documentation')
-        print()
-        for title, url in documentation_links():
-            print(f'* [{title}]({url})')
-        if not complete_javadoc():
-            print()
-            if has_javadoc():
-                print(f'Some APIs are undocumented. You might have to peek in the [source code](src/main/java/{main_package_path()}).')
-            else:
-                print(f'There is no javadoc yet. See [source code](src/main/java/{main_package_path()}) for available APIs.')
-    elif is_opensource():
-        print()
-        print_lines(f'''\
-            ## Documentation
-
-            None yet. Review source code.
-        ''')
-    if is_opensource():
-        print()
-        print_lines(f'''\
-            ## Feedback
-
-            Bug reports and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-            ## License
-
-            Distributed under [{license_name()}](LICENSE).
-        ''')
-
-def gitignore():
-    print_lines(gitignore_text())
-
-def license():
-    print(license_text(), end='')
-
-def remove_obsolete(path):
-    if path.exists():
-        print(f'Removing obsolete {path}...')
-        path.unlink()
-
-def generate(settings):
-    globals().update(settings)
-    print_to(project_directory()/'.gitignore', gitignore);
-    if is_opensource():
-        print_to(project_directory()/'LICENSE', license);
+        print_to(project_directory()/'LICENSE', license)
         print_to(project_directory()/'NOTICE', notice)
         print_to(workflows_directory()/'build.yml', build_workflow)
     if maven_central():
