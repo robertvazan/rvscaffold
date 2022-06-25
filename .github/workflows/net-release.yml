@@ -4,6 +4,7 @@ on:
     inputs:
       dotnet-version:
         required: true
+        type: string
     secrets:
       nuget-token:
         required: true
