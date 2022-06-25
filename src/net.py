@@ -64,6 +64,7 @@ def build_workflow():
             branches: [ master ]
           pull_request:
             branches: [ master ]
+          workflow_dispatch:
         jobs:
           build:
             uses: robertvazan/project-config/.github/workflows/net-build.yml@master

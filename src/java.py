@@ -155,8 +155,10 @@ def build_workflow():
         name: build
         on:
           push:
-            branches:
-              - master
+            branches: [ master ]
+          pull_request:
+            branches: [ master ]
+          workflow_dispatch:
         jobs:
           build:
             uses: robertvazan/project-config/.github/workflows/java-build.yml@master
