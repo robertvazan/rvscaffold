@@ -45,6 +45,10 @@ def standard_badges():
         print(f'[![Nuget](https://img.shields.io/nuget/v/{root_namespace()})](https://www.nuget.org/packages/{root_namespace()}/)')
     if is_opensource():
         print(f'[![Build status]({github_repository_url()}/workflows/build/badge.svg)]({github_repository_url()}/actions/workflows/build.yml)')
+def standard_documentation_links():
+    yield from common_documentation_links()
+    if is_library():
+        yield 'XML doc comments', readme_dir_url(root_namespace())
 
 def use_xml(xml): print_csproj(2, xml)
 def use(dependency):

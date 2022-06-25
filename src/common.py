@@ -23,6 +23,7 @@ github_repository_url = lambda: f'https://github.com/robertvazan/{repository_nam
 bitbucket_repository_url = lambda: f'https://bitbucket.org/robertvazan/{repository_name()}'
 repository_url = lambda: github_repository_url() if is_opensource() else bitbucket_repository_url()
 repository_file_url = lambda path: f'{repository_url()}/blob/master/{path}'
+repository_dir_url = lambda path: f'{repository_url()}/tree/master/{path}'
 
 # general info
 pretty_name = lambda: repository_name()
@@ -60,6 +61,7 @@ md_description = lambda: homepage_lead() + f'\n\nMore on [homepage]({homepage()}
 documentation_comment = lambda: None
 embeddable_readme = lambda: False
 readme_url = lambda path: repository_file_url(path) if embeddable_readme() else path
+readme_dir_url = lambda path: repository_dir_url(path) if embeddable_readme() else path
 
 def capture_output(function):
     f = io.StringIO()
