@@ -61,9 +61,9 @@ def build_workflow():
         name: build
         on:
           push:
-            branches: [ main ]
+            branches: [ master ]
           pull_request:
-            branches: [ main ]
+            branches: [ master ]
         jobs:
           build:
             uses: robertvazan/project-config/.github/workflows/net-build.yml@master
