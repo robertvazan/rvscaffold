@@ -23,6 +23,8 @@ def sln_projects():
     if has_tests():
         yield f'{root_namespace()}.Tests'
     yield from extra_sln_projects()
+resources = lambda: []
+test_resources = lambda: []
 
 # build features
 target_framework = lambda: '5.0'
@@ -116,13 +118,22 @@ def csproj():
         print_csproj(2, f'<PackageTags>{nuget_tags()}</PackageTags>')
     if nuget_icon():
         print_csproj(2, f'<PackageIcon>{nuget_icon()}</PackageIcon>')
+    print_csproj(1, '</PropertyGroup>')
+    if has_tests():
+        print_csproj(1, f'''\
+            <ItemGroup>
+                <InternalsVisibleTo Include="{root_namespace()}.Tests" />
+            </ItemGroup>
+        ''')
     print_csproj(1, '''\
-        </PropertyGroup>
         <ItemGroup>
           <None Include="../README.md" Pack="true" PackagePath="/" />
     ''')
     if nuget_icon():
         print_csproj(2, f'<None Include="{nuget_icon()}" Pack="true" PackagePath="/" />')
+    if resources():
+        for resource in resources():
+            print_csproj(2, f'<EmbeddedResource Include="{resource}" />')
     print_csproj(1, '</ItemGroup>')
     if capture_output(dependencies):
         print_csproj(1, '<ItemGroup>')
@@ -145,10 +156,13 @@ def test_csproj():
           <ItemGroup>
     ''')
     test_dependencies()
-    print_csproj(0, '''\
-          </ItemGroup>
-        </Project>
-    ''')
+    print_csproj(1, '</ItemGroup>')
+    if test_resources():
+        print_csproj(1, '<ItemGroup>')
+        for resource in test_resources():
+            print_csproj(2, f'<EmbeddedResource Include="{resource}" />')
+        print_csproj(1, '</ItemGroup>')
+    print('</Project>')
 
 def guid(project):
     author = uuid.uuid5(uuid.NAMESPACE_DNS, 'machinezoo.com')
@@ -201,4 +215,5 @@ def generate():
         print_to(project_directory()/'CONTRIBUTING.md', contribution_guidelines)
     print_to(project_directory()/'README.md', readme)
     remove_obsolete(workflows_directory()/'nuget-release.yml')
+    remove_obsolete(project_directory()/root_namespace()/'AssemblyInfo.cs')
     print(f'Updated {pretty_name()} configuration.')
