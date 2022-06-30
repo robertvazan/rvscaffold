@@ -107,7 +107,7 @@ def csproj():
             <Authors>robertvazan</Authors>
             <Title>{nuget_title()}</Title>
             <PackageProjectUrl>{homepage() if has_website() else repository_url()}</PackageProjectUrl>
-            <RepositoryUrl>{repository_url()}.git</RepositoryUrl>
+            <RepositoryUrl>{repository_url()}</RepositoryUrl>
             <PackageLicenseExpression>{license_id()}</PackageLicenseExpression>
             <GenerateDocumentationFile>true</GenerateDocumentationFile>
             <PackageReadmeFile>README.md</PackageReadmeFile>
