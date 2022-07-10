@@ -1,4 +1,4 @@
-exec((config_directory()/'src'/'common.py').read_text(), globals)
+exec((config_directory()/'src'/'common.py').read_text())
 
 # resources and constants
 lang_directory = lambda: resource_directory()/'java'
@@ -107,7 +107,7 @@ use_commons_math = define_use('org.apache.commons:commons-math3:3.6.1')
 use_commons_io = define_use('commons-io:commons-io:2.11.0')
 use_guava = define_use('com.google.guava:guava:31.0.1-jre')
 use_gson = define_use('com.google.code.gson:gson:2.8.9')
-jackson_version = lambda: '2.13.2.1'
+jackson_version = lambda: '2.13.3'
 use_jackson = define_use(f'com.fasterxml.jackson.core:jackson-databind:{jackson_version()}')
 def use_jackson_cbor():
     use_jackson()
