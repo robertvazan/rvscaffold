@@ -91,7 +91,7 @@ def use(dependency, scope=None, *, classifier=None, exclusions=[]):
 def define_use(dependency):
     return lambda *args, **kwargs: use(dependency, *args, **kwargs)
 
-use_stagean = define_use('com.machinezoo.stagean:stagean:1.2.0')
+use_stagean = define_use('com.machinezoo.stagean:stagean:1.3.0')
 use_noexception = define_use('com.machinezoo.noexception:noexception:1.8.0')
 use_hookless = define_use('com.machinezoo.hookless:hookless:0.14.4')
 use_pushmode = define_use('com.machinezoo.pushmode:pushmode:0.8.2')
