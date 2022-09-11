@@ -15,7 +15,7 @@ nuget_tags = lambda: None
 nuget_icon = lambda: 'icon.png' if (project_directory()/root_namespace()/'icon.png').exists() else None
 
 # code structure
-is_library = lambda: True
+is_library = lambda: not (project_directory()/root_namespace()/'Program.cs').exists()
 root_namespace = lambda: repository_name()
 extra_sln_projects = lambda: []
 def sln_projects():
@@ -111,21 +111,22 @@ def csproj():
         print_csproj(2, '<OutputType>Exe</OutputType>')
     if assembly_name() != root_namespace():
         print_csproj(2, f'<AssemblyName>{assembly_name()}</AssemblyName>')
+    print_csproj(2, f'''\
+        <Authors>robertvazan</Authors>
+        <RepositoryUrl>{repository_url()}</RepositoryUrl>
+        <PackageProjectUrl>{homepage() if has_website() else repository_url()}</PackageProjectUrl>
+    ''')
+    if nuget_description():
+        print_csproj(2, f'<Description>{nuget_description()}</Description>')
+    if nuget_tags():
+        print_csproj(2, f'<PackageTags>{nuget_tags()}</PackageTags>')
+    if is_opensource():
+        print_csproj(2, f'<PackageLicenseExpression>{license_id()}</PackageLicenseExpression>')
     if nuget_release():
-        print_csproj(2, f'''\
-            <Authors>robertvazan</Authors>
-            <RepositoryUrl>{repository_url()}</RepositoryUrl>
-            <PackageProjectUrl>{homepage() if has_website() else repository_url()}</PackageProjectUrl>
-            <PackageLicenseExpression>{license_id()}</PackageLicenseExpression>
-            <PackageReadmeFile>README.md</PackageReadmeFile>
-        ''')
-        if nuget_description():
-            print_csproj(2, f'<Description>{nuget_description()}</Description>')
-        if nuget_tags():
-            print_csproj(2, f'<PackageTags>{nuget_tags()}</PackageTags>')
-        if nuget_icon():
-            print_csproj(2, f'<PackageIcon>{nuget_icon()}</PackageIcon>')
-    else:
+        print_csproj(2, f'<PackageReadmeFile>README.md</PackageReadmeFile>')
+    if nuget_icon():
+        print_csproj(2, f'<PackageIcon>{nuget_icon()}</PackageIcon>')
+    if not nuget_release():
         print_csproj(2, '<IsPackable>false</IsPackable>')
     if is_library():
         print_csproj(2, '<GenerateDocumentationFile>true</GenerateDocumentationFile>')
@@ -136,12 +137,12 @@ def csproj():
                 <InternalsVisibleTo Include="{root_namespace()}.Tests" />
             </ItemGroup>
         ''')
-    if nuget_release() or resources():
+    if nuget_release() or nuget_icon() or resources():
         print_csproj(1, '<ItemGroup>')
         if nuget_release():
             print_csproj(2, '<None Include="../README.md" Pack="true" PackagePath="/" />')
-            if nuget_icon():
-                print_csproj(2, f'<None Include="{nuget_icon()}" Pack="true" PackagePath="/" />')
+        if nuget_icon():
+            print_csproj(2, f'<None Include="{nuget_icon()}" Pack="true" PackagePath="/" />')
         if resources():
             for resource in resources():
                 print_csproj(2, f'<EmbeddedResource Include="{resource}" />')
