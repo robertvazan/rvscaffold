@@ -42,7 +42,7 @@ test_dependencies = lambda: standard_test_dependencies()
 
 # readme
 md_description_fallback = lambda: nuget_description()
-embeddable_readme = lambda: True
+embeddable_readme = lambda: is_opensource()
 def standard_badges():
     if nuget_release():
         print(f'[![Nuget](https://img.shields.io/nuget/v/{root_namespace()})](https://www.nuget.org/packages/{root_namespace()}/)')
