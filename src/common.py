@@ -99,6 +99,7 @@ def print_lines(text, *, indent='', tabify=False):
     text = textwrap.indent(text, indent)
     print(text, end='')
 
+# TODO: Generate COPYRIGHT file instead of NOTICE. It's more appropriate.
 def notice():
     print(f"Robert Važan's {pretty_name()}")
     if has_website():
