@@ -50,7 +50,7 @@ stable_status = lambda: 'Stable and maintained.'
 experimental_status = lambda: 'Experimental.'
 obsolete_status = lambda: 'Obsolete. No longer maintained.'
 unpublished_status = lambda: 'Experimental. Unpublished.'
-project_status = lambda: stable_status() if is_opensource() else unpublished_status()
+project_status = lambda: experimental_status() if is_opensource() else unpublished_status()
 def common_documentation_links():
     if has_website():
         yield 'Homepage', homepage()
@@ -99,8 +99,7 @@ def print_lines(text, *, indent='', tabify=False):
     text = textwrap.indent(text, indent)
     print(text, end='')
 
-# TODO: Generate COPYRIGHT file instead of NOTICE. It's more appropriate.
-def notice():
+def copyright():
     print(f"Robert Važan's {pretty_name()}")
     if has_website():
         print(homepage())
@@ -210,3 +209,13 @@ def remove_obsolete(path):
     if path.exists():
         print(f'Removing obsolete {path}...')
         path.unlink()
+
+def generate_common():
+    print_to(project_directory()/'.gitignore', gitignore)
+    if is_opensource():
+        print_to(project_directory()/'LICENSE', license)
+        print_to(project_directory()/'COPYRIGHT', copyright)
+        print_to(project_directory()/'CONTRIBUTING.md', contribution_guidelines)
+    print_to(project_directory()/'README.md', readme)
+    remove_obsolete(project_directory()/'NOTICE')
+    print(f'Updated {pretty_name()} configuration.')

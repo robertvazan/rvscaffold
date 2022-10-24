@@ -212,10 +212,8 @@ def sln():
     ''', tabify=True)
 
 def generate():
-    print_to(project_directory()/'.gitignore', gitignore)
+    generate_common()
     if is_opensource():
-        print_to(project_directory()/'LICENSE', license)
-        print_to(project_directory()/'NOTICE', notice)
         print_to(workflows_directory()/'build.yml', build_workflow)
     if nuget_release():
         print_to(workflows_directory()/'release.yml', release_workflow)
@@ -223,9 +221,6 @@ def generate():
     if has_tests():
         print_to(project_directory()/f'{root_namespace()}.Tests'/f'{root_namespace()}.Tests.csproj', test_csproj)
     print_to(project_directory()/f'{root_namespace()}.sln', sln)
-    if is_opensource():
-        print_to(project_directory()/'CONTRIBUTING.md', contribution_guidelines)
-    print_to(project_directory()/'README.md', readme)
     remove_obsolete(workflows_directory()/'nuget-release.yml')
     remove_obsolete(project_directory()/root_namespace()/'AssemblyInfo.cs')
     print(f'Updated {pretty_name()} configuration.')

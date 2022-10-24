@@ -45,7 +45,7 @@ jdk_preview = lambda: False
 jdk_parameter_names = lambda: False
 maven_central = lambda: is_library() and is_opensource()
 test_coverage = lambda: maven_central()
-has_javadoc = lambda: maven_central()
+has_javadoc = lambda: maven_central() and has_website()
 complete_javadoc = lambda: has_javadoc()
 jmh_benchmarks = lambda: False
 stagean_annotations = lambda: False
@@ -480,17 +480,12 @@ def pom():
     ''')
 
 def generate():
-    print_to(project_directory()/'.gitignore', gitignore)
+    generate_common()
     if is_opensource():
-        print_to(project_directory()/'LICENSE', license)
-        print_to(project_directory()/'NOTICE', notice)
         print_to(workflows_directory()/'build.yml', build_workflow)
     if maven_central():
         print_to(workflows_directory()/'release.yml', release_workflow)
     print_to(project_directory()/'pom.xml', pom)
-    if is_opensource():
-        print_to(project_directory()/'CONTRIBUTING.md', contribution_guidelines)
-    print_to(project_directory()/'README.md', readme)
     remove_obsolete(project_directory()/'.travis.yml')
     remove_obsolete(workflows_directory()/'maven-release.yml')
     print(f'Updated {pretty_name()} configuration.')
