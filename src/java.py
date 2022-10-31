@@ -481,7 +481,6 @@ def pom():
     ''')
 
 def generate():
-    generate_common()
     if is_opensource():
         print_to(workflows_directory()/'build.yml', build_workflow)
     if maven_central():
@@ -489,4 +488,4 @@ def generate():
     print_to(project_directory()/'pom.xml', pom)
     remove_obsolete(project_directory()/'.travis.yml')
     remove_obsolete(workflows_directory()/'maven-release.yml')
-    print(f'Updated {pretty_name()} configuration.')
+    generate_common()

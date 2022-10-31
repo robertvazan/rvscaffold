@@ -215,7 +215,6 @@ def sln():
     ''', tabify=True)
 
 def generate():
-    generate_common()
     if is_opensource():
         print_to(workflows_directory()/'build.yml', build_workflow)
     if nuget_release():
@@ -226,4 +225,4 @@ def generate():
     print_to(project_directory()/f'{root_namespace()}.sln', sln)
     remove_obsolete(workflows_directory()/'nuget-release.yml')
     remove_obsolete(project_directory()/root_namespace()/'AssemblyInfo.cs')
-    print(f'Updated {pretty_name()} configuration.')
+    generate_common()
