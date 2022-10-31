@@ -4,16 +4,17 @@ exec((config_directory()/'src'/'common.py').read_text())
 lang_directory = lambda: resource_directory()/'java'
 
 # repository
+common_repository_name = lambda: repository_name().removesuffix('-java')
 scm_connection = lambda: f'scm:git:{repository_url()}.git'
 
 # maven coordinates
-pom_subgroup = lambda: repository_name()
+pom_subgroup = lambda: project_group()
 pom_group = lambda: 'com.machinezoo.' + pom_subgroup()
-pom_artifact = lambda: repository_name()
+pom_artifact = lambda: common_repository_name()
 
 # website
 subdomain = lambda: pom_subgroup()
-javadoc_site = lambda: website() + 'javadoc/'
+javadoc_site = lambda: f'{website()}javadocs/{project_extension() if is_extension() else "core"}/' if is_member_project() else website() + 'javadoc/'
 def javadoc_home():
     if not is_module():
         return javadoc_site()

@@ -5,6 +5,9 @@ import uuid
 # resources and constants
 lang_directory = lambda: resource_directory()/'net'
 
+# repository
+common_repository_name = lambda: repository_name().removesuffix('-net')
+
 # general info
 pretty_name = lambda: root_namespace()
 

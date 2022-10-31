@@ -15,10 +15,12 @@ gitignore_text = lambda: (lang_directory()/'gitignore.txt').read_text('utf-8')
 current_year = lambda: datetime.date.today().year
 
 # checkout
+project_directory = lambda: pathlib.Path(project_script_path).parent.parent
 workflows_directory = lambda: project_directory()/'.github'/'workflows'
 
 # repository
 repository_name = lambda: project_directory().name
+common_repository_name = lambda: repository_name()
 github_repository_url = lambda: f'https://github.com/robertvazan/{repository_name()}' if is_opensource() else None
 bitbucket_repository_url = lambda: f'https://bitbucket.org/robertvazan/{repository_name()}'
 repository_url = lambda: github_repository_url() if is_opensource() else bitbucket_repository_url()
@@ -26,6 +28,10 @@ repository_file_url = lambda path: f'{repository_url()}/blob/master/{path}'
 repository_dir_url = lambda path: f'{repository_url()}/tree/master/{path}'
 
 # general info
+project_group = lambda: common_repository_name().partition('-')[0]
+project_extension = lambda: common_repository_name().partition('-')[2] if '-' in common_repository_name() else None
+is_extension = lambda: project_extension()
+is_member_project = lambda: is_extension()
 pretty_name = lambda: repository_name()
 is_opensource = lambda: True
 project_version = lambda: (project_directory()/'scripts'/'version.txt').read_text('utf-8').strip()
@@ -39,9 +45,9 @@ license_text = lambda: apache_license_text() if is_opensource() else None
 
 # website
 has_website = lambda: is_opensource()
-subdomain = lambda: repository_name()
+subdomain = lambda: project_group()
 website = lambda: f'https://{subdomain()}.machinezoo.com/'
-homepage = lambda: website()
+homepage = lambda: website() + (project_extension() if is_extension() else '')
 
 # readme
 standard_badges = lambda: []
