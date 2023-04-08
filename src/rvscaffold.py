@@ -967,7 +967,7 @@ class Net(Repository):
               build:
                 uses: robertvazan/project-config/.github/workflows/net-build.yml@master
                 with:
-                  dotnet-version: {self.target_framework()}
+                  dotnet-version: {self.test_framework()}
         ''')
 
     def print_release_workflow(self):
@@ -981,7 +981,7 @@ class Net(Repository):
               release:
                 uses: robertvazan/project-config/.github/workflows/net-release.yml@master
                 with:
-                  dotnet-version: {self.target_framework()}
+                  dotnet-version: {self.test_framework()}
                 secrets:
                   nuget-token: ${{{{ secrets.NUGET_TOKEN }}}}
         ''')
