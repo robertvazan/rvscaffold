@@ -398,7 +398,7 @@ class Java(Repository):
     use_commons_io = define_use('commons-io:commons-io:2.11.0')
     use_guava = define_use('com.google.guava:guava:31.0.1-jre')
     use_gson = define_use('com.google.code.gson:gson:2.8.9')
-    def jackson_version(self): return '2.13.3'
+    def jackson_version(self): return '2.14.2'
     use_jackson = define_use(lambda self: f'com.fasterxml.jackson.core:jackson-databind:{self.jackson_version()}')
     use_jackson_cbor = define_use([
         use_jackson,
