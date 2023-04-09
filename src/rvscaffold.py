@@ -719,7 +719,7 @@ class Java(Repository):
               workflow_dispatch:
             jobs:
               build:
-                uses: robertvazan/project-config/.github/workflows/java-build.yml@master
+                uses: robertvazan/rvscaffold/.github/workflows/java-build.yml@master
                 with:
                   java-version: {self.jdk_version()}
                   test-coverage: {'true' if self.test_coverage() else 'false'}
@@ -734,7 +734,7 @@ class Java(Repository):
             on: workflow_dispatch
             jobs:
               release:
-                uses: robertvazan/project-config/.github/workflows/java-release.yml@master
+                uses: robertvazan/rvscaffold/.github/workflows/java-release.yml@master
                 with:
                   java-version: {self.jdk_version()}
                 secrets:
@@ -965,7 +965,7 @@ class Net(Repository):
               workflow_dispatch:
             jobs:
               build:
-                uses: robertvazan/project-config/.github/workflows/net-build.yml@master
+                uses: robertvazan/rvscaffold/.github/workflows/net-build.yml@master
                 with:
                   dotnet-version: {self.test_framework()}
         ''')
@@ -979,7 +979,7 @@ class Net(Repository):
             on: workflow_dispatch
             jobs:
               release:
-                uses: robertvazan/project-config/.github/workflows/net-release.yml@master
+                uses: robertvazan/rvscaffold/.github/workflows/net-release.yml@master
                 with:
                   dotnet-version: {self.test_framework()}
                 secrets:
