@@ -836,7 +836,7 @@ class Net(Repository):
         if self.backport_frameworks():
             print_to_csproj(2, f'<TargetFrameworks>{";".join(self.target_framework_names())}</TargetFrameworks>')
         else:
-            print_to_csproj(2, f'<TargetFramework>{self.target_framework_names()}</TargetFramework>')
+            print_to_csproj(2, f'<TargetFramework>{self.target_framework_names()[0]}</TargetFramework>')
         print_to_csproj(2, f'''\
                 <CheckEolTargetFramework>false</CheckEolTargetFramework>
                 <LangVersion>{self.lang_version()}</LangVersion>
