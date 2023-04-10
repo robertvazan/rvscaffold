@@ -383,7 +383,7 @@ class Java(Repository):
     use_closeablescope = define_use('com.machinezoo.closeablescope:closeablescope:1.0.0')
     use_noexception = define_use('com.machinezoo.noexception:noexception:1.9.0')
     use_noexception_slf4j = define_use('com.machinezoo.noexception:noexception-slf4j:1.0.1')
-    use_hookless = define_use('com.machinezoo.hookless:hookless:0.14.4')
+    use_hookless = define_use('com.machinezoo.hookless:hookless:0.15.0')
     use_pushmode = define_use('com.machinezoo.pushmode:pushmode:0.8.2')
     use_pmsite = define_use('com.machinezoo.pmsite:pmsite:0.18.4')
     use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.12.4')
