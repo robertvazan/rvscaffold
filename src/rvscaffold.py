@@ -401,7 +401,7 @@ class Java(Repository):
     use_commons_math = define_use('org.apache.commons:commons-math3:3.6.1')
     use_commons_io = define_use('commons-io:commons-io:2.11.0')
     use_commons_text = define_use('org.apache.commons:commons-text:1.10.0')
-    use_guava = define_use('com.google.guava:guava:31.0.1-jre')
+    use_guava = define_use('com.google.guava:guava:32.0.0-jre')
     use_gson = define_use('com.google.code.gson:gson:2.10.1')
     def jackson_version(self): return '2.14.2'
     use_jackson = define_use(lambda self: f'com.fasterxml.jackson.core:jackson-databind:{self.jackson_version()}')
@@ -409,7 +409,7 @@ class Java(Repository):
         use_jackson,
         define_use(lambda self: f'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:{self.jackson_version()}')
     ])
-    def jmh_version(self): return '1.34'
+    def jmh_version(self): return '1.36'
     use_jmh = define_use([
         define_use(lambda self: f'org.openjdk.jmh:jmh-core:{self.jmh_version()}'),
         define_use(lambda self: f'org.openjdk.jmh:jmh-generator-annprocess:{self.jmh_version()}')
