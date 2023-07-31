@@ -537,7 +537,7 @@ class Java(Repository):
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.1.2</version>
         ''')
         if self.jdk_preview():
             print_to_pom(4, '''\
