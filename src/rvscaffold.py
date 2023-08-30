@@ -389,7 +389,7 @@ class Java(Repository):
     use_hookless_noexception = define_use('com.machinezoo.hookless:hookless-noexception:0.1.0')
     use_hookless_collections = define_use('com.machinezoo.hookless:hookless-collections:0.1.0')
     use_pushmode = define_use('com.machinezoo.pushmode:pushmode:0.8.3')
-    use_pmsite = define_use('com.machinezoo.pmsite:pmsite:0.18.5')
+    use_pmsite = define_use('com.machinezoo.pmsite:pmsite:0.18.6')
     use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.12.5')
 
     # commonly used libraries
