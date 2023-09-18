@@ -724,11 +724,28 @@ class Java(Repository):
               workflow_dispatch:
             jobs:
               build:
-                uses: robertvazan/rvscaffold/.github/workflows/java-build.yml@master
-                with:
-                  java-version: {self.jdk_version()}
-                  test-coverage: {'true' if self.test_coverage() else 'false'}
+                runs-on: ubuntu-latest
+                steps:
+                  - uses: actions/checkout@v2
+                  - uses: actions/setup-java@v2
+                    with:
+                      distribution: temurin
+                      java-version: {self.jdk_version()}
+                      cache: maven
+                  - name: Maven
+                    run: |
+                      # GPG must be skipped, because CI server does not have release GPG key.
+                      # Failure on javadoc warnings is enabled only in CI builds,
+                      # so that warnings specific to one JDK version do not break independent builds.
+                      # Printing maven version (-V) helps diagnose CI-specific build behavior.
         ''')
+        goals = ['install']
+        if self.test_coverage():
+            print_lines('# JaCoCo phase is needed to create code coverage report that will be later uploaded to Codecov.', indent='          ')
+            goals.append('jacoco:report')
+        print_lines(f'mvn {" ".join(goals)} -Dgpg.skip=true -Dmaven.javadoc.failOnWarnings=true -B -V', indent='          ')
+        if self.test_coverage():
+            print_lines('- uses: codecov/codecov-action@v2', indent='      ')
 
     def print_release_workflow(self):
         # GitHub Actions cannot run the whole release procedure.
@@ -739,13 +756,26 @@ class Java(Repository):
             on: workflow_dispatch
             jobs:
               release:
-                uses: robertvazan/rvscaffold/.github/workflows/java-release.yml@master
-                with:
-                  java-version: {self.jdk_version()}
-                secrets:
-                  server-password: ${{{{ secrets.MAVEN_SERVER_PASSWORD }}}}
-                  signing-key: ${{{{ secrets.MAVEN_SIGNING_KEY }}}}
-                  signing-password: ${{{{ secrets.MAVEN_SIGNING_PASSWORD }}}}
+                runs-on: ubuntu-latest
+                steps:
+                  - uses: actions/checkout@v2
+                  - uses: actions/setup-java@v2
+                    with:
+                      distribution: temurin
+                      java-version: {self.jdk_version()}
+                      server-id: ossrh
+                      server-username: MAVEN_SERVER_USERNAME
+                      server-password: MAVEN_SERVER_PASSWORD
+                      gpg-private-key: ${{{{ secrets.MAVEN_SIGNING_KEY }}}}
+                      gpg-passphrase: MAVEN_SIGNING_PASSWORD
+                      cache: maven
+                  - name: Maven
+                    # Printing maven version (-V) helps diagnose GitHub-specific build behavior.
+                    run: mvn -B -V deploy
+                    env:
+                      MAVEN_SERVER_USERNAME: robertvazan
+                      MAVEN_SERVER_PASSWORD: ${{{{ secrets.MAVEN_SERVER_PASSWORD }}}}
+                      MAVEN_SIGNING_PASSWORD: ${{{{ secrets.MAVEN_SIGNING_PASSWORD }}}}
         ''')
 
     def generate_files(self):
