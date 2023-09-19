@@ -333,7 +333,7 @@ class Java(Repository):
         if self.maven_central():
             g = self.pom_group()
             a = self.pom_artifact()
-            print(f'[![Maven Central](https://img.shields.io/maven-central/v/{g}/{a})](https://search.maven.org/artifact/{g}/{a})')
+            print(f'[![Maven Central](https://img.shields.io/maven-central/v/{g}/{a})](https://central.sonatype.com/artifact/{g}/{a})')
         if self.is_opensource():
             u = self.github_repository_url()
             print(f'[![Build status]({u}/workflows/build/badge.svg)]({u}/actions/workflows/build.yml)')
@@ -390,6 +390,7 @@ class Java(Repository):
     use_hookless_collections = define_use('com.machinezoo.hookless:hookless-collections:0.1.0')
     use_pushmode = define_use('com.machinezoo.pushmode:pushmode:0.8.3')
     use_pmsite = define_use('com.machinezoo.pmsite:pmsite:0.18.6')
+    use_ladybugformatters = define_use('com.machinezoo.ladybugformatters:ladybugformatters:0.1.1')
     use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.12.5')
 
     # commonly used libraries
