@@ -394,7 +394,7 @@ class Java(Repository):
     use_remorabindings = define_use('com.machinezoo.remorabindings:remorabindings:0.1.0')
     use_meerkatwidgets = define_use('com.machinezoo.meerkatwidgets:meerkatwidgets:0.1.0')
     use_foxcache = define_use('com.machinezoo.foxcache:foxcache:0.1.2')
-    use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.12.5')
+    use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.13.0')
 
     # commonly used libraries
     use_slf4j = define_use('org.slf4j:slf4j-api:1.7.32')
