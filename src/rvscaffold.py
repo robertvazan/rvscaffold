@@ -391,7 +391,7 @@ class Java(Repository):
     use_pushmode = define_use('com.machinezoo.pushmode:pushmode:0.8.3')
     use_pmsite = define_use('com.machinezoo.pmsite:pmsite:0.18.6')
     use_ladybugformatters = define_use('com.machinezoo.ladybugformatters:ladybugformatters:0.1.1')
-    use_remorabindings = define_use('com.machinezoo.remorabindings:remorabindings:0.1.0')
+    use_remorabindings = define_use('com.machinezoo.remorabindings:remorabindings:0.2.1')
     use_meerkatwidgets = define_use('com.machinezoo.meerkatwidgets:meerkatwidgets:0.1.0')
     use_foxcache = define_use('com.machinezoo.foxcache:foxcache:0.1.3')
     use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.13.0')
