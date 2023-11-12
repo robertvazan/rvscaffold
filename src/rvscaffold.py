@@ -380,7 +380,7 @@ class Java(Repository):
 
     # my own libraries
     use_stagean = define_use('com.machinezoo.stagean:stagean:1.3.0')
-    use_closeablescope = define_use('com.machinezoo.closeablescope:closeablescope:1.0.0')
+    use_closeablescope = define_use('com.machinezoo.closeablescope:closeablescope:1.0.1')
     use_noexception = define_use('com.machinezoo.noexception:noexception:1.9.0')
     use_noexception_slf4j = define_use('com.machinezoo.noexception:noexception-slf4j:1.0.1')
     use_hookless = define_use('com.machinezoo.hookless:hookless:0.16.0')
@@ -397,7 +397,7 @@ class Java(Repository):
     use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.13.0')
 
     # commonly used libraries
-    use_slf4j = define_use('org.slf4j:slf4j-api:1.7.32')
+    use_slf4j = define_use('org.slf4j:slf4j-api:2.0.9')
     use_streamex = define_use('one.util:streamex:0.8.1')
     use_fastutil = define_use('it.unimi.dsi:fastutil:8.5.6')
     use_commons_lang = define_use('org.apache.commons:commons-lang3:3.12.0')
@@ -422,8 +422,8 @@ class Java(Repository):
     # common test libraries
     def use_junit(self): return self.use('org.junit.jupiter:junit-jupiter:5.10.1', 'test')
     def use_hamcrest(self): return self.use('org.hamcrest:hamcrest:2.2', 'test')
-    def use_mockito(self): return self.use('org.mockito:mockito-core:4.2.0', 'test')
-    def use_slf4j_test(self): return self.use('com.github.valfirst:slf4j-test:2.3.0', 'test')
+    def use_mockito(self): return self.use('org.mockito:mockito-core:5.7.0', 'test')
+    def use_slf4j_test(self): return self.use('com.github.valfirst:slf4j-test:3.0.1', 'test')
 
     def print_pom(self):
         print_to_pom(0, f'''\
