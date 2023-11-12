@@ -420,7 +420,7 @@ class Java(Repository):
     ])
 
     # common test libraries
-    def use_junit(self): return self.use('org.junit.jupiter:junit-jupiter:5.8.2', 'test')
+    def use_junit(self): return self.use('org.junit.jupiter:junit-jupiter:5.10.1', 'test')
     def use_hamcrest(self): return self.use('org.hamcrest:hamcrest:2.2', 'test')
     def use_mockito(self): return self.use('org.mockito:mockito-core:4.2.0', 'test')
     def use_slf4j_test(self): return self.use('com.github.valfirst:slf4j-test:2.3.0', 'test')
@@ -512,7 +512,7 @@ class Java(Repository):
             <plugins>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.11.0</version>
         ''')
         if self.jdk_preview() or self.jdk_parameter_names() or self.jmh_benchmarks():
             print_to_pom(4, '<configuration>')
@@ -541,7 +541,7 @@ class Java(Repository):
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.2</version>
         ''')
         if self.jdk_preview():
             print_to_pom(4, '''\
@@ -557,7 +557,7 @@ class Java(Repository):
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.7</version>
+                    <version>0.8.11</version>
                     <executions>
                         <execution>
                             <id>prepare-agent</id>
@@ -581,7 +581,7 @@ class Java(Repository):
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.6.2</version>
                     <configuration>
                         <notimestamp>true</notimestamp>
             ''')
@@ -618,7 +618,7 @@ class Java(Repository):
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.3.0</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -641,6 +641,8 @@ class Java(Repository):
             ''')
             if self.jdk_version() >= 17:
                 # Bugs OSSRH-66257 and NEXUS-26993.
+                # Not going to be fixed: https://github.com/sonatype/nexus-public/issues/110
+                # New plugin in development: https://central.sonatype.org/publish-ea/publish-ea-guide/#publishing-by-uploading-a-bundle
                 print_to_pom(4, '''\
                     <dependencies>
                         <dependency>
@@ -655,7 +657,7 @@ class Java(Repository):
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
-                    <version>1.6</version>
+                    <version>3.1.0</version>
                     <configuration>
                         <gpgArguments>
                             <arg>--pinentry-mode</arg>
@@ -680,7 +682,7 @@ class Java(Repository):
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.3</version>
+                    <version>3.5.1</version>
                     <executions>
                         <execution>
                             <phase>package</phase>
