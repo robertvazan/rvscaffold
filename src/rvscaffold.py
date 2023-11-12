@@ -381,7 +381,7 @@ class Java(Repository):
     # my own libraries
     use_stagean = define_use('com.machinezoo.stagean:stagean:1.3.0')
     use_closeablescope = define_use('com.machinezoo.closeablescope:closeablescope:1.0.1')
-    use_noexception = define_use('com.machinezoo.noexception:noexception:1.9.0')
+    use_noexception = define_use('com.machinezoo.noexception:noexception:1.9.1')
     use_noexception_slf4j = define_use('com.machinezoo.noexception:noexception-slf4j:1.0.1')
     use_hookless = define_use('com.machinezoo.hookless:hookless:0.16.0')
     use_hookless_time = define_use('com.machinezoo.hookless:hookless-time:0.1.0')
