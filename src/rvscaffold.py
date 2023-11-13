@@ -398,9 +398,9 @@ class Java(Repository):
 
     # commonly used libraries
     use_slf4j = define_use('org.slf4j:slf4j-api:2.0.9')
-    use_streamex = define_use('one.util:streamex:0.8.1')
+    use_streamex = define_use('one.util:streamex:0.8.2')
     use_fastutil = define_use('it.unimi.dsi:fastutil:8.5.12')
-    use_commons_lang = define_use('org.apache.commons:commons-lang3:3.12.0')
+    use_commons_lang = define_use('org.apache.commons:commons-lang3:3.13.0')
     use_commons_collections = define_use('org.apache.commons:commons-collections4:4.4')
     use_commons_math = define_use('org.apache.commons:commons-math3:3.6.1')
     use_commons_io = define_use('commons-io:commons-io:2.15.0')
