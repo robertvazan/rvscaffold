@@ -389,7 +389,7 @@ class Java(Repository):
     use_hookless_noexception = define_use('com.machinezoo.hookless:hookless-noexception:0.1.0')
     use_hookless_collections = define_use('com.machinezoo.hookless:hookless-collections:0.1.0')
     use_pushmode = define_use('com.machinezoo.pushmode:pushmode:0.8.5')
-    use_pmsite = define_use('com.machinezoo.pmsite:pmsite:0.18.6')
+    use_pmsite = define_use('com.machinezoo.pmsite:pmsite:0.18.8')
     use_ladybugformatters = define_use('com.machinezoo.ladybugformatters:ladybugformatters:0.1.1')
     use_remorabindings = define_use('com.machinezoo.remorabindings:remorabindings:0.2.1')
     use_meerkatwidgets = define_use('com.machinezoo.meerkatwidgets:meerkatwidgets:0.2.0')
