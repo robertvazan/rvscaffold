@@ -394,7 +394,7 @@ class Java(Repository):
     use_remorabindings = define_use('com.machinezoo.remorabindings:remorabindings:0.2.2')
     use_meerkatwidgets = define_use('com.machinezoo.meerkatwidgets:meerkatwidgets:0.2.1')
     use_foxcache = define_use('com.machinezoo.foxcache:foxcache:0.1.4')
-    use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.13.0')
+    use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.13.1')
 
     # commonly used libraries
     use_slf4j = define_use('org.slf4j:slf4j-api:2.0.9')
@@ -404,7 +404,7 @@ class Java(Repository):
     use_commons_collections = define_use('org.apache.commons:commons-collections4:4.4')
     use_commons_math = define_use('org.apache.commons:commons-math3:3.6.1')
     use_commons_io = define_use('commons-io:commons-io:2.15.0')
-    use_commons_text = define_use('org.apache.commons:commons-text:1.10.0')
+    use_commons_text = define_use('org.apache.commons:commons-text:1.11.0')
     use_guava = define_use('com.google.guava:guava:32.1.3-jre')
     use_gson = define_use('com.google.code.gson:gson:2.10.1')
     def jackson_version(self): return '2.15.3'
