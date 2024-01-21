@@ -393,7 +393,7 @@ class Java(Repository):
     use_ladybugformatters = define_use('com.machinezoo.ladybugformatters:ladybugformatters:0.1.2')
     use_remorabindings = define_use('com.machinezoo.remorabindings:remorabindings:0.2.2')
     use_meerkatwidgets = define_use('com.machinezoo.meerkatwidgets:meerkatwidgets:0.2.1')
-    use_foxcache = define_use('com.machinezoo.foxcache:foxcache:0.1.5')
+    use_foxcache = define_use('com.machinezoo.foxcache:foxcache:0.1.6')
     use_pmdata = define_use('com.machinezoo.pmdata:pmdata:0.13.1')
 
     # commonly used libraries
