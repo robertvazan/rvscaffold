@@ -701,6 +701,7 @@ class Java(Repository):
                                     <filter>
                                         <artifact>*:*</artifact>
                                         <excludes>
+                                            <exclude>module-info.class</exclude>
                                             <exclude>META-INF/*.SF</exclude>
                                             <exclude>META-INF/*.DSA</exclude>
                                             <exclude>META-INF/*.RSA</exclude>
