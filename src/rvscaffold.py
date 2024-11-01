@@ -629,30 +629,13 @@ class Java(Repository):
                     </executions>
                 </plugin>
                 <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.8</version>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.6.0</version>
                     <extensions>true</extensions>
                     <configuration>
-                        <serverId>ossrh</serverId>
-                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        <publishingServerId>central</publishingServerId>
                     </configuration>
-            ''')
-            if self.jdk_version() >= 17:
-                # Bugs OSSRH-66257 and NEXUS-26993.
-                # Not going to be fixed: https://github.com/sonatype/nexus-public/issues/110
-                # New plugin in development: https://central.sonatype.org/publish-ea/publish-ea-guide/#publishing-by-uploading-a-bundle
-                print_to_pom(4, '''\
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.thoughtworks.xstream</groupId>
-                            <artifactId>xstream</artifactId>
-                            <version>1.4.15</version>
-                        </dependency>
-                    </dependencies>
-                ''')
-            print_to_pom(3, '''\
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -770,7 +753,7 @@ class Java(Repository):
                     with:
                       distribution: temurin
                       java-version: {self.jdk_version()}
-                      server-id: ossrh
+                      server-id: central
                       server-username: MAVEN_SERVER_USERNAME
                       server-password: MAVEN_SERVER_PASSWORD
                       gpg-private-key: ${{{{ secrets.MAVEN_SIGNING_KEY }}}}
@@ -780,7 +763,7 @@ class Java(Repository):
                     # Printing maven version (-V) helps diagnose GitHub-specific build behavior.
                     run: mvn -B -V deploy
                     env:
-                      MAVEN_SERVER_USERNAME: robertvazan
+                      MAVEN_SERVER_USERNAME: ${{{{ secrets.MAVEN_SERVER_USERNAME }}}}
                       MAVEN_SERVER_PASSWORD: ${{{{ secrets.MAVEN_SERVER_PASSWORD }}}}
                       MAVEN_SIGNING_PASSWORD: ${{{{ secrets.MAVEN_SIGNING_PASSWORD }}}}
         ''')
