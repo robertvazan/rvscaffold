@@ -1,0 +1,5 @@
+Robert Važan's {project.prettyName}
+{project.homepage}
+
+Copyright {project.inceptionYear}-{date.currentYear} Robert Važan and contributors
+Distributed under {project.licenseName}.
