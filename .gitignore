@@ -1,0 +1,11 @@
+# Common operating system files
+*~
+.DS_Store
+Thumbs.db
+.directory
+.fuse_hidden*
+.nfs*
+
+# Common IDE/editor files
+.vscode/
+.idea/

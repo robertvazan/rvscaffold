@@ -1,6 +1,6 @@
 # Maven Guidelines
 
-This document provides guidelines for structuring the `pom.xml` file in Java projects, as mentioned in the [Java Project Guidelines](README.md).
+This document provides guidelines for structuring the `pom.xml` file in Java projects, as mentioned in the [Java Project Guidelines](README.md). An annotated [example `pom.xml`](example-pom.xml) is available for reference.
 
 The `pom.xml` file is the core of a Maven project. It should be well-structured and contain all necessary information to build, test, and distribute the project.
 
@@ -8,20 +8,35 @@ The `pom.xml` file is the core of a Maven project. It should be well-structured 
 
 The `pom.xml` must define the project's coordinates:
 
--   `<groupId>`: Follows the reverse-DNS convention, typically `com.machinezoo.subgroup`.
--   `<artifactId>`: The name of the project, e.g., `projectname`.
+-   `<groupId>`: Follows reverse-DNS convention, typically `com.machinezoo.subgroup`.
+    -   For a standalone project like `my-project`, the subgroup is `myproject`.
+    -   For a project that is part of a larger group, like `project-core` and `project-extension`, the subgroup is `project`. The groupId is shared, and the artifactId distinguishes the modules.
+-   `<artifactId>`: The name of the project, e.g., `project-name`.
 -   `<version>`: The project's version, following semantic versioning.
 
 ## Metadata
 
-The POM should include the following metadata:
+The POM should include standard metadata for identification and for publication to Maven Central:
 
--   `<name>`: A human-readable name for the project.
+-   `<name>`: A human-readable name for the project (short name).
 -   `<description>`: A short description of the project.
 -   `<url>`: A link to the project's homepage or repository.
 -   `<inceptionYear>`: The year the project was created.
--   `<licenses>`: An entry for the Apache License 2.0 for open-source projects.
--   `<organization>` and `<developers>`: Information about the author.
+-   `<licenses>`: An entry for the Apache License 2.0.
+-   `<organization>` and `<developers>`: Information about the author. This should be consistent across projects:
+    ```xml
+    <organization>
+        <name>Robert Važan</name>
+        <url>https://robert.machinezoo.com/</url>
+    </organization>
+    <developers>
+        <developer>
+            <name>Robert Važan</name>
+            <email>robert.vazan@tutanota.com</email>
+            <url>https://robert.machinezoo.com/</url>
+        </developer>
+    </developers>
+    ```
 -   `<scm>`: Source Control Management information, pointing to the Git repository.
 
 ## Properties
@@ -29,27 +44,23 @@ The POM should include the following metadata:
 Define the following properties:
 
 -   `<project.build.sourceEncoding>`: Should be `UTF-8`.
--   `<maven.compiler.release>`: The target Java language level (e.g., `11`, `17`).
-
-## Dependencies
-
-Dependencies are listed in the `<dependencies>` section. This section should be managed manually for each project. The guidelines do not prescribe specific dependencies or versions.
+-   `<maven.compiler.release>`: The target Java language level (e.g., `11`).
 
 ## Build Configuration
 
-The `<build>` section configures the build process, primarily through plugins.
+The `<build>` section configures the build process, primarily through plugins. It is important to use up-to-date plugin versions to support modern Java versions and to ensure reproducible builds.
 
 ### Standard Plugins
 
--   `maven-compiler-plugin`: To compile Java source code. Ensure its version is up-to-date.
--   `maven-surefire-plugin`: To run unit tests. Ensure its version is up-to-date.
+-   `maven-compiler-plugin` (3.11.0+): To compile Java source code.
+-   `maven-surefire-plugin` (3.2.2+): To run unit tests.
 
 ### Plugins for Publishing to Maven Central
 
-For libraries distributed via Maven Central, the following plugins are required:
+For libraries distributed via Maven Central, a specific set of plugins is required to meet the publication requirements.
 
--   `jacoco-maven-plugin`: To generate test coverage reports.
--   `maven-javadoc-plugin`: To generate Javadoc. It should be configured to attach the javadoc JAR to the build.
--   `maven-source-plugin`: To bundle the source code into a source JAR.
---   `central-publishing-maven-plugin`: To handle the release process to Sonatype OSSRH and Maven Central.
--   `maven-gpg-plugin`: To sign the artifacts before release.
+-   `jacoco-maven-plugin` (0.8.11+): To generate test coverage reports, which are often required by quality gates and for reporting to services like Codecov.
+-   `maven-javadoc-plugin` (3.6.2+): To generate Javadoc. Maven Central requires a `javadoc.jar` artifact.
+-   `maven-source-plugin` (3.3.0+): To bundle the source code. A `sources.jar` artifact is also a requirement.
+-   `central-publishing-maven-plugin` (0.6.0+): A modern plugin to handle the release process to Sonatype OSSRH and Maven Central. It simplifies what used to be a complex process involving `maven-deploy-plugin` and `nexus-staging-maven-plugin`.
+-   `maven-gpg-plugin` (3.1.0+): To sign the artifacts, a security requirement for publishing.

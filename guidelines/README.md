@@ -10,9 +10,16 @@ All projects, regardless of language, should contain some standard files in thei
 
 The `README.md` file is the front page of the project. It should include:
 
--   A Stand with Ukraine banner.
--   The project's pretty name as a level 1 heading.
--   Badges for build status, package registry versions, test coverage, etc.
+-   A Stand with Ukraine banner. You can use this Markdown snippet:
+    ```markdown
+    [![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
+    ```
+-   The project's short name as a level 1 heading (e.g., "SourceAFIS for Java").
+-   Badges for build status, package registry versions, and test coverage. Examples:
+    -   **Build Status (GitHub Actions):** `[![Build status](https://github.com/{user}/{repo}/actions/workflows/build.yml/badge.svg)](https://github.com/{user}/{repo}/actions/workflows/build.yml)`
+    -   **Maven Central:** `[![Maven Central](https://img.shields.io/maven-central/v/{group}/{artifact})](https://central.sonatype.com/artifact/{group}/{artifact})`
+    -   **NuGet:** `[![NuGet](https://img.shields.io/nuget/v/{package})](https://www.nuget.org/packages/{package}/)`
+    -   **Test Coverage (Codecov):** `[![Test coverage](https://codecov.io/gh/{user}/{repo}/branch/master/graph/badge.svg)](https://codecov.io/gh/{user}/{repo})`
 -   A short description of the project.
 -   A "Status" section describing the project's maturity (e.g., experimental, stable, obsolete).
 -   A "Getting started" or "Documentation" section with links to the project's homepage, API documentation (like Javadoc or XML doc comments), and other relevant resources.
@@ -20,11 +27,11 @@ The `README.md` file is the front page of the project. It should include:
 
 ### `LICENSE`
 
-For open-source projects, a `LICENSE` file containing the [Apache License 2.0](templates/apache-2.0-license.txt) is required.
+For open-source projects, a `LICENSE` file containing the Apache License 2.0 is required. It should be a copy of the [LICENSE file from the `rvscaffold` repository](../../LICENSE).
 
 ### `COPYRIGHT`
 
-A `COPYRIGHT` file should be present to state copyright information clearly. It should follow the format in the [COPYRIGHT template](templates/COPYRIGHT.txt).
+A `COPYRIGHT` file should be present to state copyright information clearly. It should use the project's long legal name (e.g., "Robert Važan's SourceAFIS for Java"). See the [COPYRIGHT example](example-copyright.txt) for the recommended format.
 
 ### `CONTRIBUTING.md`
 
@@ -32,22 +39,19 @@ This file provides guidance for contributors. It should cover:
 
 -   Links to authoritative repositories (GitHub, Bitbucket).
 -   How to submit issues and pull requests.
--   A note about generated code if applicable.
 -   A statement that contributions will be licensed under the project's license.
+-   Any project-specific exceptions to the guidelines in this repository.
 
 ### `.gitignore`
 
-Every project must have a `.gitignore` file. Use the appropriate template as a starting point:
-
--   [Java .gitignore](templates/gitignore-java.txt)
--   [.NET .gitignore](templates/gitignore-net.txt)
+Every project must have a `.gitignore` file. It should start with the contents of the [base .gitignore from `rvscaffold`](../../.gitignore), followed by language-specific patterns.
 
 ## Language-Specific Guidelines
 
 For detailed instructions on setting up projects in a specific language, see the documents below:
 
 -   [Java Project Guidelines](java/README.md)
--   [.NET Project Guidelines](net/README.md)
+-   [.NET Project Guidelines](dotnet/README.md)
 
 ## Migration from the Old Scaffolding Tool
 

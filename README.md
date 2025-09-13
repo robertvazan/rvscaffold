@@ -12,12 +12,12 @@ The LLM can adapt the guidelines to project-specific requirements. Any exception
 
 ## Structure
 
-The core content is located in the `guidelines/` directory. It contains:
-- A main [`README.md`](guidelines/README.md) that serves as an entry point.
-- Language-specific guidelines in subdirectories (e.g., `java/`, `net/`).
-- Templates for common files like `.gitignore`.
+This repository is organized as follows:
 
-The old Python-based scaffolding code is preserved in the `legacy/` directory for historical reference.
+-   `guidelines/`: The core content. It contains a main [`README.md`](guidelines/README.md) that serves as an entry point, with language-specific guidelines in subdirectories (e.g., `java/`, `dotnet/`).
+-   `legacy/`: The old Python-based scaffolding code, preserved for historical reference.
+-   `CONTRIBUTING.md`: Meta-guidelines for maintaining this repository, which you are currently reading.
+-   `README.md`: Introduction, usage, basic information.
 
 ## License
 

@@ -1,0 +1,21 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]eleases/
+[Rr]elease/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider
+*.sln.iml
+
+# NuGet packages
+*.nupkg
+*.snupkg
+**/[Pp]ackages/

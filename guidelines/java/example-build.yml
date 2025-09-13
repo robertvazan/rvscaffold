@@ -1,0 +1,25 @@
+# Example build workflow for a Java/Maven project
+name: build
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          cache: 'maven'
+      - name: Build and test
+        # -B runs in non-interactive (batch) mode
+        # -V displays version information
+        # jacoco:report generates test coverage report
+        run: mvn -B -V install jacoco:report
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4

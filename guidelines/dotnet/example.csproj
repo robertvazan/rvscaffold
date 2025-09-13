@@ -1,0 +1,31 @@
+<!-- Example .csproj file for a .NET library -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <Version>1.2.3</Version>
+    <Title>Example .NET Library</Title>
+    <Authors>robertvazan</Authors>
+    <Description>An example project to demonstrate .csproj structure.</Description>
+    <PackageTags>example library demo</PackageTags>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/robertvazan/example-library-net</RepositoryUrl>
+    <PackageProjectUrl>https://example.machinezoo.com/net</PackageProjectUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Example.Library.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SourceAFIS" Version="3.14.0" />
+  </ItemGroup>
+
+</Project>
