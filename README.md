@@ -10,14 +10,9 @@ To apply these guidelines to a project, instruct your LLM assistant to consult t
 
 The LLM can adapt the guidelines to project-specific requirements. Any exceptions or special instructions for a particular project should be documented in that project's `CONTRIBUTING.md` file or a similar document.
 
-## Structure
+## Contributing
 
-This repository is organized as follows:
-
--   `guidelines/`: The core content. It contains a main [`README.md`](guidelines/README.md) that serves as an entry point, with language-specific guidelines in subdirectories (e.g., `java/`, `dotnet/`).
--   `legacy/`: The old Python-based scaffolding code, preserved for historical reference.
--   `CONTRIBUTING.md`: Meta-guidelines for maintaining this repository, which you are currently reading.
--   `README.md`: Introduction, usage, basic information.
+For guidelines on how this repository is maintained, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
