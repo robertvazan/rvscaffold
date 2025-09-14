@@ -19,6 +19,7 @@ The main project's `.csproj` file should define the following properties:
 
 - `<TargetFramework>` or `<TargetFrameworks>`: Specifies the target .NET version(s).
 - `<LangVersion>`: Specifies the C# language version (e.g., `12.0`).
+- `<EnableNETAnalyzers>`: Should be `true` to enable Roslyn code analysis.
 - `<Version>`: The package version, following semantic versioning.
 - `<Title>`: A human-readable name for the package.
 - `<Authors>`: Should be `robertvazan`.
@@ -28,6 +29,8 @@ The main project's `.csproj` file should define the following properties:
 - `<PackageReadmeFile>` and `<PackageIcon>`: For NuGet packages.
 - `<GenerateDocumentationFile>`: Should be `true` for libraries to generate XML documentation from comments.
 - For libraries with tests, an `<InternalsVisibleTo>` attribute to make internal types visible to the test project.
+
+For projects that are not intended to be published as a NuGet package (e.g., test projects, executables), the `.csproj` file should contain `<IsPackable>false</IsPackable>`.
 
 ## Standard Files
 

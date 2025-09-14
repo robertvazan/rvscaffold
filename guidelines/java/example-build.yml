@@ -20,6 +20,7 @@ jobs:
         # -B runs in non-interactive (batch) mode
         # -V displays version information
         # jacoco:report generates test coverage report
-        run: mvn -B -V install jacoco:report
+        # -Dmaven.javadoc.failOnWarnings=true enforces Javadoc quality
+        run: mvn -B -V install jacoco:report -Dmaven.javadoc.failOnWarnings=true
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4

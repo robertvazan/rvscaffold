@@ -24,3 +24,7 @@ This project no longer provides reusable GitHub Actions workflows. Each project 
 ## Dependency Management
 
 The scaffolding tool used to provide helper methods to add common dependencies. This is no longer the case. Dependencies should be added and managed manually in the project's build file (`pom.xml` or `.csproj`).
+
+## Removal of `<CheckEolTargetFramework>`
+
+The old scaffolding tool added `<CheckEolTargetFramework>false</CheckEolTargetFramework>` to `.csproj` files to suppress warnings about using end-of-life .NET versions. The new policy is to always use supported .NET versions. Remove this property from your `.csproj` files and upgrade the target framework if necessary.

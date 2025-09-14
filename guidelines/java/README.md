@@ -15,6 +15,7 @@ These are guidelines for structuring Java projects, building upon the [general p
 
 - **`.gitignore`:** Add Java-specific patterns to the project's `.gitignore` file. See the [Java .gitignore example](example-gitignore.txt) for a minimal set of patterns to include.
 - **GitHub Actions:** Projects use GitHub Actions for Continuous Integration (CI) and releases.
+  - The build workflow should be configured to fail on Javadoc warnings by passing `-Dmaven.javadoc.failOnWarnings=true` to Maven. This helps maintain documentation quality.
   - See the example [build workflow](example-build.yml).
   - For libraries published to Maven Central, see the example [release workflow](example-release.yml).
 

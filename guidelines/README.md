@@ -15,6 +15,7 @@ The `README.md` file is the front page of the project. It should include:
 - Badges for build status, package registry versions, and test coverage.
 - A short description of the project.
 - A "Status" section describing the project's maturity (e.g., experimental, stable, obsolete).
+  - For projects that use [Stagean](https://stagean.machinezoo.com/) annotations, the status description should mention it.
 - A "Getting started" or "Documentation" section with links to the project's homepage, API documentation (like Javadoc or XML doc comments), and other relevant resources.
 - For open-source projects, "Feedback" and "License" sections pointing to `CONTRIBUTING.md` and `LICENSE` files.
 
