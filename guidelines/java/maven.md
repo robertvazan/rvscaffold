@@ -57,8 +57,10 @@ For libraries distributed via Maven Central, a specific set of plugins is requir
 
 ### Plugins for JMH Benchmarks
 
-For projects that include [Java Microbenchmark Harness (JMH)](https://openjdk.java.net/projects/code-tools/jmh/) benchmarks, additional configuration is needed.
+For projects that include [Java Microbenchmark Harness (JMH)](https://openjdk.java.net/projects/code-tools/jmh/) benchmarks, additional configuration is needed. A complete [example `pom.xml` for a JMH project](example-pom-jmh.xml) is available.
 
-- Add JMH dependencies (`jmh-core` and `jmh-generator-annprocess`).
-- Configure `maven-compiler-plugin` to use the JMH annotation processor by adding an `<annotationProcessorPaths>` section.
-- Add and configure `maven-shade-plugin` (3.5.1+) to create an executable JAR for the benchmarks. This JAR should include all dependencies and have `org.openjdk.jmh.Main` as its main class.
+The required configuration includes:
+
+- JMH dependencies (`jmh-core` and `jmh-generator-annprocess`).
+- `maven-compiler-plugin` configured to use the JMH annotation processor via `<annotationProcessorPaths>`.
+- `maven-shade-plugin` (3.5.1+) configured to create an executable JAR for the benchmarks. This JAR should include all dependencies and have `org.openjdk.jmh.Main` as its main class.
