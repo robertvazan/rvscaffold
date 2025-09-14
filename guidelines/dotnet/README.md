@@ -8,6 +8,7 @@ A typical .NET solution is organized as follows:
 
 - `{ProjectName}.sln`: The solution file in the root directory.
 - `{ProjectName}/`: A directory containing the main project's source code and `.csproj` file.
+  - For executable projects, the entry point should be in a `Program.cs` file in this directory.
 - `{ProjectName}.Tests/`: A directory for the test project.
 - An [example `.csproj` file](example.csproj) is available for reference.
 

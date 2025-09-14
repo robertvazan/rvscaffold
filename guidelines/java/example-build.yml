@@ -21,6 +21,7 @@ jobs:
         # -V displays version information
         # jacoco:report generates test coverage report
         # -Dmaven.javadoc.failOnWarnings=true enforces Javadoc quality
-        run: mvn -B -V install jacoco:report -Dmaven.javadoc.failOnWarnings=true
+        # -Dgpg.skip=true skips GPG signing, which is only done on release
+        run: mvn -B -V install jacoco:report -Dmaven.javadoc.failOnWarnings=true -Dgpg.skip=true
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4

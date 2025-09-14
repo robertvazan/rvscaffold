@@ -14,7 +14,10 @@ The `README.md` file is the front page of the project. It should include:
 - The project's short name as a level 1 heading (e.g., "SourceAFIS for Java").
 - Badges for build status, package registry versions, and test coverage.
 - A short description of the project.
-- A "Status" section describing the project's maturity (e.g., experimental, stable, obsolete).
+- A "Status" section describing the project's maturity. Common statuses include:
+  - **Experimental:** The project is under active development, and APIs may change.
+  - **Stable:** The project is considered stable and suitable for production use.
+  - **Obsolete:** The project is no longer maintained.
   - For projects that use [Stagean](https://stagean.machinezoo.com/) annotations, the status description should mention it.
 - A "Getting started" or "Documentation" section with links to the project's homepage, API documentation (like Javadoc or XML doc comments), and other relevant resources.
 - For open-source projects, "Feedback" and "License" sections pointing to `CONTRIBUTING.md` and `LICENSE` files.
@@ -29,11 +32,12 @@ A `COPYRIGHT` file should be present to state copyright information clearly. It 
 
 ### `CONTRIBUTING.md`
 
-This file provides guidance for contributors. It should cover:
+This file provides guidance for contributors. See the [CONTRIBUTING.md example](example-contributing.md) for a recommended template. It should cover:
 
 - Links to authoritative repositories (GitHub, Bitbucket).
-- How to submit issues and pull requests.
+- Guidance on how to submit issues and pull requests.
 - A statement that contributions will be licensed under the project's license.
+- If the project contains generated code, a note about how it is managed. Scripts for code generation are typically placed in the `scripts/` directory.
 - Any project-specific exceptions to the guidelines in this repository.
 
 ### `.gitignore`

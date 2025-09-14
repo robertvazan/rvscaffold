@@ -49,6 +49,7 @@ For libraries distributed via Maven Central, a specific set of plugins is requir
 
 - `jacoco-maven-plugin` (0.8.11+): To generate test coverage reports, which are often required by quality gates and for reporting to services like Codecov.
 - `maven-javadoc-plugin` (3.6.2+): To generate Javadoc. Maven Central requires a `javadoc.jar` artifact.
+  - To produce cleaner and more reproducible Javadoc, configure the plugin with `<notimestamp>true</notimestamp>` and add a `<bottom>` element to suppress the default copyright notice.
   - To enable cross-linking to Javadoc of dependency libraries, add a `<links>` section to the plugin configuration with URLs to the Javadoc of all dependencies. This is preferred over `<detectLinks>`, which can be unreliable in CI environments.
   - For projects with incomplete Javadoc, the `<doclint>` option can be configured to ignore missing comments (e.g., `<doclint>all,-missing</doclint>`) to avoid build failures, especially on newer JDKs.
 - `maven-source-plugin` (3.3.0+): To bundle the source code. A `sources.jar` artifact is also a requirement.
