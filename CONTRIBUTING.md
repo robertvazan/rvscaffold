@@ -24,7 +24,6 @@ What to include in and exclude from the guidelines:
 This repository is organized as follows:
 
 - `guidelines/`: The core content. It contains a main [`README.md`](guidelines/README.md) that serves as an entry point, with language-specific guidelines in subdirectories (e.g., `java/`, `dotnet/`).
-- `legacy/`: The old Python-based scaffolding code, preserved for historical reference.
 - `CONTRIBUTING.md`: Meta-guidelines for maintaining this repository, which you are currently reading.
 - `README.md`: Introduction, usage, basic information.
 
