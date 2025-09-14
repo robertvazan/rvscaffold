@@ -34,7 +34,7 @@ A `COPYRIGHT` file should be present to state copyright information clearly. It 
 
 This file provides guidance for contributors. See the [CONTRIBUTING.md example](example-contributing.md) for a recommended template. It should cover:
 
-- Links to authoritative repositories (GitHub, Bitbucket).
+- Links to repositories (GitHub, Bitbucket).
 - Guidance on how to submit issues and pull requests.
 - A statement that contributions will be licensed under the project's license.
 - If the project contains generated code, a note about how it is managed. Scripts for code generation are typically placed in the `scripts/` directory.

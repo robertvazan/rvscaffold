@@ -7,11 +7,12 @@ It is referenced from guidelines/README.md.
 
 Thank you for taking interest in Example Project. This document provides guidance for contributors.
 
-## Authoritative repository
+## Repositories
 
-The authoritative repository is on GitHub: https://github.com/robertvazan/example-project
+Sources are mirrored on several sites. You can submit issues and pull requests on any of them.
 
-Please submit all issues and pull requests there.
+- [example-project @ GitHub](https://github.com/robertvazan/example-project)
+- [example-project @ Bitbucket](https://bitbucket.org/robertvazan/example-project)
 
 ## Issues
 
