@@ -50,6 +50,7 @@ For detailed instructions on setting up projects in a specific language, see the
 
 - [Java Project Guidelines](java/README.md)
 - [.NET Project Guidelines](dotnet/README.md)
+- [Python Project Guidelines](python/README.md)
 
 ## Private Projects
 
