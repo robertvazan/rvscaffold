@@ -51,6 +51,16 @@ For detailed instructions on setting up projects in a specific language, see the
 - [Java Project Guidelines](java/README.md)
 - [.NET Project Guidelines](dotnet/README.md)
 
+## Private Projects
+
+These guidelines primarily describe public, open-source projects. Private projects (personal or proprietary) that are not intended for publication follow a simplified structure:
+
+- **`README.md` and `CONTRIBUTING.md`**: These files should clearly state that the project is personal and private. The `CONTRIBUTING.md` file in this case is not for external contributors but serves as a reference for the author and for LLM assistants, documenting the project's structure and development conventions.
+- **No `LICENSE` or `COPYRIGHT`**: Since the project is not distributed, these files are omitted.
+- **Repositories**: Private projects usually do not have a remote repository. `CONTRIBUTING.md` does not list repository links in that case. If a remote repository exists, it is private and used for personal purposes like synchronization, not for public collaboration.
+- **No CI/CD**: There are no public continuous integration workflows (e.g., GitHub Actions). Consequently, `README.md` files for private projects do not include build status badges or other CI-related information.
+- **Simplified `README.md`**: The `README.md` is simpler and focused on the project's purpose and usage for the author. Sections related to open-source collaboration, like "Feedback" and "License", are omitted. It also omits badges and banners common in public projects.
+
 ## Migration from the Old Scaffolding Tool
 
 If you are familiar with the previous Python-based scaffolding tool, please read the [Migration Guide](migration.md) to understand the changes.
